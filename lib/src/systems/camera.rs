@@ -41,7 +41,7 @@ pub fn update_camera_desired_position(
     let mut camera = camera_query.single_mut();
     let player_transform = player_query.single();
 
-    let mut origin_transform = player_transform.clone();
+    let mut origin_transform = *player_transform;
     origin_transform.rotation = Quat::default();
     origin_transform.rotate_y(camera.rotation.to_radians());
 

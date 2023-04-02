@@ -11,11 +11,3 @@ fn main() {
         // .add_startup_system(setup)
         .run();
 }
-
-fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
-    commands.spawn(Camera2dBundle::default());
-    commands.spawn(SpriteBundle {
-        texture: asset_server.load("s22.png"),
-        ..default()
-    });
-}

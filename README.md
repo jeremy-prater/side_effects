@@ -18,6 +18,21 @@ Terrain could possibly be generated using a combination of high and low frequenc
 
 This would also allow for collision detection based on a low-cost noise function and different levels based on the initial seed.
 
+## Mushroom effects
+
+We should have a discussion about permanent vs temporary effects 
+
+### Positive
+
+- Health boost
+- Extra action slot for one turn
+
+### Negative
+
+- Death
+- Lose a turn
+- Lose an action for one turn
+
 ## Running in the browser
 
 ### Setup
