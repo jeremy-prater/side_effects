@@ -1,5 +1,6 @@
+use crate::components::mushroom::{ActiveMushroomEffect, MushroomEffect};
 use bevy::prelude::*;
-use crate::components::mushroom::MushroomEffect;
+use std::collections::{HashSet, VecDeque};
 
 pub enum TanukiActions {
     Idle,
@@ -13,8 +14,9 @@ pub enum TanukiActions {
 #[derive(Component)]
 pub struct Tanuki {
     pub age: u32,
+    pub max_hp: u32,
     pub hp: u32,
-    pub current_effects: Vec<MushroomEffect>,
-    pub blocked_effects: Vec<MushroomEffect>,
-    pub next_action: TanukiActions
+    pub current_effects: Vec<ActiveMushroomEffect>,
+    pub blocked_effects: HashSet<MushroomEffect>,
+    pub next_actions: VecDeque<TanukiActions>,
 }

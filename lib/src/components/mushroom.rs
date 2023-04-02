@@ -16,6 +16,12 @@ pub enum MushroomEffect {
 }
 
 #[derive(Component)]
+pub struct ActiveMushroomEffect {
+    pub effect: MushroomEffect,
+    pub turns_left: u32,
+}
+
+#[derive(Component)]
 pub struct Mushroom {
     pub hp: u32,
     pub effect: MushroomEffect,
