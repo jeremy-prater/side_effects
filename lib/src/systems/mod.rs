@@ -1,3 +1,4 @@
+pub mod animation;
 pub mod camera;
 pub mod player;
 pub mod terrain;

@@ -1,21 +1,22 @@
 use bevy::prelude::*;
 use bevy_rapier3d::prelude::*;
 
-use crate::components::{movement::Direction, player::Player};
+use crate::components::{animation::AnimationMarker, movement::Direction, player::Player};
 
-pub fn spawn_player(
-    mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
-    _asset_server: Res<AssetServer>,
-) {
+pub fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands
-        .spawn(PbrBundle {
-            mesh: meshes.add(Mesh::from(shape::Capsule::default())),
-            material: materials.add(Color::TURQUOISE.into()),
+        // .spawn(PbrBundle {
+        //     mesh: meshes.add(Mesh::from(shape::Capsule::default())),
+        //     material: materials.add(Color::TURQUOISE.into()),
+        //     transform: Transform::from_xyz(0.0, 3.0, 0.0),
+        //     ..default()
+        // })
+        .spawn(SceneBundle {
+            scene: asset_server.load("models/Tanuki.glb#Scene0"),
             transform: Transform::from_xyz(0.0, 3.0, 0.0),
             ..default()
         })
+        .insert(AnimationMarker::new("tanuki", "idle"))
         .insert(RigidBody::Dynamic)
         .insert(Velocity::default())
         .insert(LockedAxes::ROTATION_LOCKED)
