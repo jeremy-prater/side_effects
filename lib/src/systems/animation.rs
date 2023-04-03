@@ -11,12 +11,12 @@ pub fn setup_animation_library(
     animation_library.insert(
         "tanuki",
         "idle",
-        asset_server.load("models/tanuki.glb#Animation0"),
+        asset_server.load("models/Tanuki.glb#Animation0"),
     );
     animation_library.insert(
         "tanuki",
         "run",
-        asset_server.load("models/tanuki.glb#Animation1"),
+        asset_server.load("models/Tanuki.glb#Animation1"),
     );
 }
 pub fn read_animation_events(
