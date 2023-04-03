@@ -2,6 +2,7 @@ use crate::components::animation::{AnimationController, AnimationMarker};
 use crate::events::animation::AnimationTransitionEvent;
 use crate::resources::animation::AnimationLibrary;
 use bevy::prelude::*;
+use log::info;
 
 pub fn setup_animation_library(
     asset_server: Res<AssetServer>,
@@ -61,7 +62,7 @@ pub fn assign_animation_controllers(
     animation_player_query: Query<Entity, (With<AnimationPlayer>, Without<AnimationController>)>,
 ) {
     if !animation_player_query.is_empty() {
-        println!("Attached Animation Controller");
+        info!("Attached Animation Controller");
         for (entity, marker) in &marker_query {
             for anim_entity in &animation_player_query {
                 for descendant in child_query.iter_descendants(entity) {

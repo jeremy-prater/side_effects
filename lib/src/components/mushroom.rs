@@ -1,8 +1,10 @@
 use bevy::prelude::*;
 
+#[derive(Default)]
 pub enum MushroomEffect {
     // These are the side-effects :)
     // There are good and bad ones
+    #[default]
     NoSideEffect,
 
     // Negative effects
@@ -21,7 +23,7 @@ pub struct ActiveMushroomEffect {
     pub turns_left: u32,
 }
 
-#[derive(Component)]
+#[derive(Component, Default)]
 pub struct Mushroom {
     pub hp: u32,
     pub effect: MushroomEffect,

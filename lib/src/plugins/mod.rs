@@ -29,6 +29,7 @@ impl Plugin for SideEffectsPlugin {
             .add_plugin(PlayerPlugin)
             .add_plugin(TerrainPlugin)
             .add_plugin(MainMenuPlugin)
+            .add_plugin(MushroomGeneratorPlugin)
             .add_system(debug_game_state_changes);
     }
 }
