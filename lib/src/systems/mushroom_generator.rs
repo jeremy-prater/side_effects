@@ -4,8 +4,8 @@ use noise::{NoiseFn, Perlin, Seedable};
 
 const MUSHROOM_X_SPAWN_RANGE: i32 = 100;
 const MUSHROOM_Z_SPAWN_RANGE: i32 = 100;
-const MUSHROOM_RADIUS_SPAWN_STEP: usize = 15;
-const MUSHROOM_RENDER_SCALE: f32 = 1.0;
+const MUSHROOM_RADIUS_SPAWN_STEP: usize = 10;
+const MUSHROOM_RENDER_SCALE: f32 = 0.30;
 const MUSHROOM_NOISE_SCALE: f64 = 250.0;
 
 const MUSHROOM_GEN_LOW: f64 = 0.2;
@@ -62,12 +62,15 @@ pub fn spawn_mushroom(
             ]);
 
             if value >= MUSHROOM_GEN_LOW && value <= MUSHROOM_GEN_HIGH {
-                info!("Generating Mushroom data {x}x{z} : {:?}", value);
-
                 commands
                     .spawn(SceneBundle {
                         scene: mushroom_model.clone(),
-                        transform: Transform::from_translation(Vec3::new(x as f32, 0.0, z as f32)),
+                        transform: Transform::from_translation(Vec3::new(x as f32, 0.0, z as f32))
+                            .with_scale(Vec3::from((
+                                MUSHROOM_RENDER_SCALE,
+                                MUSHROOM_RENDER_SCALE,
+                                MUSHROOM_RENDER_SCALE,
+                            ))),
                         ..default()
                     })
                     .insert(Mushroom::default());
@@ -78,5 +81,7 @@ pub fn spawn_mushroom(
                 }
             }
         }
+
+        // TODO : Query mushrooms too far from camera and despawn
     }
 }
