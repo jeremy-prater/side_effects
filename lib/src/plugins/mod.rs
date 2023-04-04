@@ -3,6 +3,7 @@ use bevy::prelude::*;
 pub mod animation;
 pub mod asset_loader;
 pub mod camera;
+pub mod lighting;
 pub mod main_menu;
 pub mod mushroom_generator;
 pub mod player;
@@ -11,6 +12,7 @@ pub mod terrain;
 pub use animation::*;
 pub use asset_loader::*;
 pub use camera::*;
+pub use lighting::*;
 pub use main_menu::*;
 pub use mushroom_generator::*;
 pub use player::*;
@@ -30,6 +32,7 @@ impl Plugin for SideEffectsPlugin {
             .add_plugin(TerrainPlugin)
             .add_plugin(MainMenuPlugin)
             .add_plugin(MushroomGeneratorPlugin)
+            .add_plugin(LightingPlugin)
             .add_system(debug_game_state_changes);
     }
 }

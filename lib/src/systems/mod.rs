@@ -1,7 +1,8 @@
 pub mod animation;
 pub mod camera;
-pub mod player;
-pub mod terrain;
-pub mod mushroom_generator;
+pub mod lighting;
 pub mod loading;
 pub mod main_menu;
+pub mod mushroom_generator;
+pub mod player;
+pub mod terrain;
