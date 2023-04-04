@@ -4,6 +4,8 @@ use bevy::prelude::*;
 pub fn spawn_sun(mut commands: Commands) {
     let directional_light = DirectionalLight {
         color: Color::ORANGE_RED,
+        shadows_enabled: true,
+        illuminance: 10000.0,
         ..default()
     };
 
