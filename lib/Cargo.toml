@@ -12,3 +12,4 @@ leafwing-input-manager = "0.9.1"
 noise = "0.8.2"
 iyes_progress = { version = "0.8", features = [ "assets" ] }
 log = "0.4.17"
+rand = "0.8.5"
