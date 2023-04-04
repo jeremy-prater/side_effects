@@ -2,9 +2,9 @@ name: Rust
 
 on:
   push:
-    branches: [ "trunk" ]
+    branches: [ "**" ]
   pull_request:
-    branches: [ "trunk" ]
+    branches: [ "**" ]
 
 env:
   CARGO_TERM_COLOR: always
@@ -12,7 +12,7 @@ env:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
     - uses: actions/checkout@v3
