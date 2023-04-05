@@ -1,5 +1,3 @@
-use std::f32::consts::PI;
-
 use crate::components::{camera::MainCamera, mushroom::Mushroom};
 use crate::resources::mushroom_db::MushroomDatabase;
 use bevy::prelude::*;
@@ -7,6 +5,7 @@ use bevy::utils::HashSet;
 use bevy_rapier3d::prelude::*;
 use noise::{NoiseFn, Perlin};
 use rand::prelude::*;
+use std::f32::consts::PI;
 
 const MUSHROOM_X_SPAWN_RANGE: i32 = 100;
 const MUSHROOM_Z_SPAWN_RANGE: i32 = 100;
@@ -100,7 +99,10 @@ pub fn spawn_mushroom(
                     })
                     .insert(RigidBody::Fixed)
                     .insert(LockedAxes::ROTATION_LOCKED)
-                    .insert(Collider::cylinder(1.0, 2.0))
+                    .insert(Collider::cylinder(
+                        1.0,
+                        (2.0 * MUSHROOM_RENDER_SCALE).max(3.0),
+                    ))
                     .insert(Mushroom::default());
 
                 generate_count -= 1;

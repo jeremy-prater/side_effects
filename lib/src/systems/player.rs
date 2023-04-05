@@ -26,8 +26,8 @@ pub fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>) {
             angular_damping: 0.0,
         })
         .insert(Friction {
-            coefficient: 1.0,
-            combine_rule: CoefficientCombineRule::Min,
+            coefficient: 8.0,
+            combine_rule: CoefficientCombineRule::Average,
         })
         .insert(GravityScale(1.0))
         .insert(Player);
