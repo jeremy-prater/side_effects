@@ -2,7 +2,6 @@ use crate::states::game_state::GameState;
 use crate::systems::main_menu;
 use bevy::prelude::*;
 
-
 pub struct MainMenuPlugin;
 
 impl Plugin for MainMenuPlugin {

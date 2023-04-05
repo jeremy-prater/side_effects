@@ -1,5 +1,5 @@
+use super::resource::MushroomDatabase;
 use crate::components::{camera::MainCamera, mushroom::Mushroom};
-use crate::resources::mushroom_db::MushroomDatabase;
 use bevy::prelude::*;
 use bevy::utils::HashSet;
 use bevy_rapier3d::prelude::*;
