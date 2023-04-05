@@ -3,6 +3,8 @@ use crate::components::{
     movement::{Direction, Momentum},
     player::Player,
 };
+use crate::events::animation::AnimationTransitionEvent;
+
 use crate::resources::player::PlayerSpeed;
 use bevy::prelude::*;
 use bevy_rapier3d::prelude::*;
@@ -15,6 +17,28 @@ pub fn set_player_direction(
     let camera_transform = camera_query.single();
     for mut direction in &mut player_query {
         direction.set(get_direction_in_camera_space(camera_transform, &input));
+    }
+}
+
+pub fn animate_player_movement(
+    player_query: Query<(Entity, &Direction), With<Player>>,
+    mut animation_transition_writer: EventWriter<AnimationTransitionEvent>,
+    mut is_moving: Local<bool>,
+) {
+    let previous_is_moving = *is_moving;
+    let (entity, direction) = player_query.single();
+    *is_moving = direction.is_moving();
+
+    if *is_moving != previous_is_moving {
+        let animation_name: String = if *is_moving {
+            "run".to_string()
+        } else {
+            "idle".to_string()
+        };
+        animation_transition_writer.send(AnimationTransitionEvent {
+            entity_id: entity,
+            animation_name,
+        });
     }
 }
 
@@ -70,6 +94,7 @@ pub fn apply_momentum(mut query: Query<(&mut Velocity, &Transform, &Momentum)>) 
         if should_change_velocity {
             velocity.linvel.x = speed_to_apply.x;
             velocity.linvel.z = speed_to_apply.z;
+            println!("Current Velocity: {:?}", velocity.linvel);
         }
     }
 }
@@ -97,11 +122,11 @@ pub fn get_direction_in_camera_space(
         z -= 1.0;
     }
 
-    if input.pressed(KeyCode::A) {
+    if input.pressed(KeyCode::D) {
         x += 1.0;
     }
 
-    if input.pressed(KeyCode::D) {
+    if input.pressed(KeyCode::A) {
         x -= 1.0;
     }
 
