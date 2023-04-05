@@ -19,11 +19,11 @@ pub fn rotate_camera(
     let mut camera = camera_query.single_mut();
 
     if input.pressed(KeyCode::Q) {
-        camera.rotation -= 90.0 * time.delta_seconds();
+        camera.rotation += 90.0 * time.delta_seconds();
     }
 
     if input.pressed(KeyCode::E) {
-        camera.rotation += 90.0 * time.delta_seconds();
+        camera.rotation -= 90.0 * time.delta_seconds();
     }
 
     if camera.rotation > 360.0 {
