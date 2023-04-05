@@ -2,8 +2,7 @@ use std::f32::consts::PI;
 
 use crate::components::{camera::MainCamera, mushroom::Mushroom};
 use crate::resources::mushroom_db::MushroomDatabase;
-use bevy::prelude::*;
-use bevy::utils::HashSet;
+use bevy::{prelude::*, utils::HashSet};
 use bevy_rapier3d::prelude::*;
 use noise::{NoiseFn, Perlin};
 use rand::prelude::*;

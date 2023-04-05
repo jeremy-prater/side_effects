@@ -1,6 +1,8 @@
-use crate::components::mushroom::{ActiveMushroomEffect, MushroomEffect};
-use bevy::prelude::*;
 use std::collections::{HashSet, VecDeque};
+
+use bevy::prelude::*;
+
+use crate::components::mushroom::{ActiveMushroomEffect, MushroomEffect};
 
 pub enum TanukiActions {
     Idle,

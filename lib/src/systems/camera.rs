@@ -1,14 +1,18 @@
 use crate::components::camera::MainCamera;
 use crate::components::player::Player;
 use bevy::prelude::*;
+use kayak_ui::CameraUIKayak;
 
 pub fn spawn_main_camera(mut commands: Commands) {
     commands
-        .spawn(Camera3dBundle {
-            transform: Transform::from_translation(Vec3::splat(10.0))
-                .looking_at(Vec3::ZERO, Vec3::Y),
-            ..default()
-        })
+        .spawn((
+            Camera3dBundle {
+                transform: Transform::from_translation(Vec3::splat(10.0))
+                    .looking_at(Vec3::ZERO, Vec3::Y),
+                ..default()
+            },
+            CameraUIKayak,
+        ))
         .insert(MainCamera::default());
 }
 pub fn rotate_camera(
