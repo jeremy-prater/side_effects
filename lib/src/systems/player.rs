@@ -1,7 +1,11 @@
 use bevy::prelude::*;
 use bevy_rapier3d::prelude::*;
 
-use crate::components::{animation::AnimationMarker, movement::Direction, player::Player};
+use crate::components::{
+    animation::AnimationMarker,
+    movement::{Direction, Momentum},
+    player::Player,
+};
 
 pub fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands
@@ -22,6 +26,7 @@ pub fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>) {
         .insert(LockedAxes::ROTATION_LOCKED)
         .insert(Collider::capsule_y(0.5, 0.5))
         .insert(Direction::default())
+        .insert(Momentum::default())
         .insert(Damping {
             linear_damping: 0.2,
             angular_damping: 0.0,
