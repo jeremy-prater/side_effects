@@ -1,4 +1,4 @@
-use crate::resources::loading::LoadingScreen;
+use super::resource::LoadingScreen;
 use bevy::prelude::*;
 use iyes_progress::prelude::*;
 use log::info;

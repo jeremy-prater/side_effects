@@ -1,7 +1,10 @@
+pub mod resource;
+pub mod system;
+
 use crate::states::game_state::GameState;
-use crate::systems::loading;
 use bevy::prelude::*;
 use iyes_progress::prelude::*;
+use system::*;
 
 pub struct AssetLoaderPlugin;
 
@@ -16,10 +19,10 @@ impl Plugin for AssetLoaderPlugin {
             )
             // Load our UI assets during our loading screen
             .add_systems(
-                (loading::setup_loading_ui, loading::load_game_assets)
+                (setup_loading_ui, load_game_assets)
                     .chain()
                     .in_schedule(OnEnter(GameState::Loading)),
             )
-            .add_system(loading::teardown_loading_ui.in_schedule(OnExit(GameState::Loading)));
+            .add_system(teardown_loading_ui.in_schedule(OnExit(GameState::Loading)));
     }
 }

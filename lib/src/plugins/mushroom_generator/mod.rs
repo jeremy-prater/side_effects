@@ -1,6 +1,10 @@
+pub mod resource;
+pub mod system;
+
 use crate::states::game_state::GameState;
-use crate::systems::mushroom_generator::{init_mushrooms, spawn_mushroom};
 use bevy::prelude::*;
+use system::*;
+
 pub struct MushroomGeneratorPlugin;
 
 impl Plugin for MushroomGeneratorPlugin {
