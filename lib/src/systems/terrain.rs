@@ -9,11 +9,11 @@ pub fn spawn_terrain(
     // Ground
     commands
         .spawn(PbrBundle {
-            mesh: meshes.add(Mesh::from(shape::Box::new(500.0, 1.0, 500.0))),
+            mesh: meshes.add(Mesh::from(shape::Box::new(1000.0, 1.0, 1000.0))),
             material: materials.add(Color::GREEN.into()),
             transform: Transform::from_xyz(0.0, -1.0, 0.0),
             ..default()
         })
-        .insert(Collider::cuboid(250.0, 0.5, 250.0))
+        .insert(Collider::cuboid(1000.0, 0.5, 1000.0))
         .insert(RigidBody::Fixed);
 }

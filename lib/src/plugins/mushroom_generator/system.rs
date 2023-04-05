@@ -1,5 +1,5 @@
 use super::resource::MushroomDatabase;
-use crate::components::{camera::MainCamera, mushroom::Mushroom};
+use crate::components::{mushroom::Mushroom, player::Player};
 use bevy::prelude::*;
 use bevy::utils::HashSet;
 use bevy_rapier3d::prelude::*;
@@ -13,8 +13,8 @@ const MUSHROOM_RADIUS_SPAWN_STEP: usize = 10;
 const MUSHROOM_RENDER_SCALE: f32 = 0.30;
 const MUSHROOM_NOISE_SCALE: f64 = 1.0 / 250.0;
 
-const MUSHROOM_GEN_LOW: f32 = 0.0;
-const MUSHROOM_GEN_HIGH: f32 = 0.6;
+const MUSHROOM_GEN_LOW: f32 = 0.5;
+const MUSHROOM_GEN_HIGH: f32 = 0.7;
 
 const MUSHROOM_ROTATE: f32 = 0.05;
 const MUSHROOM_X_JITTER: f32 = 2.0;
@@ -33,11 +33,12 @@ pub fn spawn_mushroom(
     mut commands: Commands,
     mut mushroom_db: ResMut<MushroomDatabase>,
     asset_server: Res<AssetServer>,
-    camera_query: Query<&MainCamera>,
+    player_query: Query<&Transform, &Player>,
     query: Query<&Mushroom>,
+    despawner: Query<(Entity, &Transform), With<Mushroom>>,
 ) {
-    let camera = camera_query.get_single();
-    if camera.is_err() {
+    let player = player_query.get_single();
+    if player.is_err() {
         return;
     }
 
@@ -49,14 +50,19 @@ pub fn spawn_mushroom(
         return;
     }
 
-    let origin = camera_query.get_single().unwrap().offset;
+    let origin = player.unwrap().translation;
     let mushroom_model: Handle<Scene> = asset_server.load("models/mushroom2.glb#Scene0");
 
-    let x_start = (origin.x as i32 - MUSHROOM_X_SPAWN_RANGE) / 2;
-    let x_end = (origin.x as i32 + MUSHROOM_X_SPAWN_RANGE) / 2;
+    let x = ((origin.x / MUSHROOM_RADIUS_SPAWN_STEP as f32).ceil()
+        * MUSHROOM_RADIUS_SPAWN_STEP as f32) as i32;
+    let z = ((origin.z / MUSHROOM_RADIUS_SPAWN_STEP as f32).ceil()
+        * MUSHROOM_RADIUS_SPAWN_STEP as f32) as i32;
 
-    let z_start = (origin.z as i32 - MUSHROOM_Z_SPAWN_RANGE) / 2;
-    let z_end = (origin.z as i32 + MUSHROOM_Z_SPAWN_RANGE) / 2;
+    let x_start = x - MUSHROOM_X_SPAWN_RANGE;
+    let x_end = x + MUSHROOM_X_SPAWN_RANGE;
+
+    let z_start = z - MUSHROOM_Z_SPAWN_RANGE;
+    let z_end = z + MUSHROOM_Z_SPAWN_RANGE;
 
     let perlin = Perlin::new(0);
 
@@ -112,6 +118,10 @@ pub fn spawn_mushroom(
             }
         }
 
-        // TODO : Query mushrooms too far from camera and despawn
+        for (entity, transform) in despawner.iter() {
+            if transform.translation.distance(origin) > (MUSHROOM_X_SPAWN_RANGE + MUSHROOM_Z_SPAWN_RANGE) as f32 {
+                commands.entity(entity).despawn_recursive();
+            }
+        }
     }
 }

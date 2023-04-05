@@ -94,7 +94,7 @@ pub fn apply_momentum(mut query: Query<(&mut Velocity, &Transform, &Momentum)>) 
         if should_change_velocity {
             velocity.linvel.x = speed_to_apply.x;
             velocity.linvel.z = speed_to_apply.z;
-            println!("Current Velocity: {:?}", velocity.linvel);
+            // println!("Current Velocity: {:?}", velocity.linvel);
         }
     }
 }
