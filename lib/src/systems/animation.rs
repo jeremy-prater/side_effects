@@ -3,6 +3,7 @@ use crate::events::animation::AnimationTransitionEvent;
 use crate::resources::animation::AnimationLibrary;
 use bevy::prelude::*;
 use log::info;
+use std::time::Duration;
 
 pub fn setup_animation_library(
     asset_server: Res<AssetServer>,
@@ -43,13 +44,14 @@ pub fn transfer_animations(
 ) {
     for (controller, mut player) in &mut query {
         player
-            .play(
+            .play_with_transition(
                 animation_library
                     .get(
                         &controller.animation_collection_name,
                         &controller.current_clip,
                     )
                     .unwrap(),
+                Duration::from_secs_f32(0.2),
             )
             .repeat();
     }

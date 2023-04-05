@@ -5,6 +5,7 @@ pub mod asset_loader;
 pub mod camera;
 pub mod lighting;
 pub mod main_menu;
+pub mod movement;
 pub mod mushroom_generator;
 pub mod player;
 pub mod terrain;
@@ -14,6 +15,7 @@ pub use asset_loader::*;
 pub use camera::*;
 pub use lighting::*;
 pub use main_menu::*;
+pub use movement::*;
 pub use mushroom_generator::*;
 pub use player::*;
 pub use terrain::*;
@@ -31,6 +33,7 @@ impl Plugin for SideEffectsPlugin {
             .add_plugin(PlayerPlugin)
             .add_plugin(TerrainPlugin)
             .add_plugin(MainMenuPlugin)
+            .add_plugin(MovementPlugin)
             .add_plugin(MushroomGeneratorPlugin)
             .add_plugin(LightingPlugin)
             .add_system(debug_game_state_changes);
