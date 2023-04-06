@@ -11,3 +11,6 @@ pub struct UiCamera;
 
 #[derive(Component)]
 pub struct Camera;
+
+#[derive(Component)]
+pub struct Title;

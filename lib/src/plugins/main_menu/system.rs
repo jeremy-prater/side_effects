@@ -1,5 +1,5 @@
+use super::component::*;
 use bevy::prelude::*;
-
 use log::info;
 
 const NORMAL_BUTTON: Color = Color::rgb(0.15, 0.15, 0.15);
@@ -14,7 +14,32 @@ pub fn setup_menu(mut commands: Commands, asset_server: Res<AssetServer>) {
                 .looking_at(Vec3::new(0.0, 0.0, 0.0), Vec3::Y),
             ..default()
         })
-        .insert(crate::components::main_menu::Camera);
+        .insert(Camera);
+
+    let title = commands
+        .spawn(TextBundle {
+            text: Text::from_section(
+                "The Tanukis' Trip",
+                TextStyle {
+                    font: asset_server.load("fonts/freedom.ttf"),
+                    font_size: 80.0,
+                    color: Color::rgb(0.9, 0.9, 0.9),
+                },
+            ),
+            style: Style {
+                justify_content: JustifyContent::Center,
+                padding: UiRect {
+                    left: Val::Percent(5.),
+                    right: Val::Percent(5.),
+                    top: Val::Percent(5.),
+                    bottom: Val::Percent(5.),
+                },
+                ..default()
+            },
+            ..default()
+        })
+        .insert(Title)
+        .id();
 
     let exit_button = commands
         .spawn(ButtonBundle {
@@ -34,9 +59,9 @@ pub fn setup_menu(mut commands: Commands, asset_server: Res<AssetServer>) {
         .with_children(|parent| {
             parent.spawn(TextBundle {
                 text: Text::from_section(
-                    "Name",
+                    "Start",
                     TextStyle {
-                        font: asset_server.load("fonts/ARCADE.TTF"),
+                        font: asset_server.load("fonts/arcade.ttf"),
                         font_size: 40.0,
                         color: Color::rgb(0.9, 0.9, 0.9),
                     },
@@ -44,9 +69,8 @@ pub fn setup_menu(mut commands: Commands, asset_server: Res<AssetServer>) {
                 ..default()
             });
         })
-        .insert(crate::components::main_menu::ExitButton)
+        .insert(ExitButton)
         .id();
-
     let menu = commands
         .spawn(NodeBundle {
             background_color: BackgroundColor(Color::rgb(0.5, 0.5, 0.5)),
@@ -61,10 +85,10 @@ pub fn setup_menu(mut commands: Commands, asset_server: Res<AssetServer>) {
             },
             ..Default::default()
         })
-        .insert(crate::components::main_menu::MainMenu)
+        .insert(MainMenu)
         .id();
 
-    commands.entity(menu).push_children(&[exit_button]);
+    commands.entity(menu).push_children(&[exit_button, title]);
 }
 
 #[allow(clippy::type_complexity)]
