@@ -6,12 +6,14 @@ use log::info;
 pub fn load_game_assets(asset_server: Res<AssetServer>, mut loading: ResMut<AssetsLoading>) {
     info!("Loading game assets");
 
-    let font: Handle<Font> = asset_server.load("fonts/ARCADE.TTF");
+    let arcade_font: Handle<Font> = asset_server.load("fonts/arcade.ttf");
+    let freedom_font: Handle<Font> = asset_server.load("fonts/freedom.ttf");
     let tanuki_model: Handle<Scene> = asset_server.load("models/Tanuki.glb#Scene0");
     let mushrooom2_model: Handle<Scene> = asset_server.load("models/mushroom2.glb#Scene0");
     let tree_model: Handle<Scene> = asset_server.load("models/tree_1.glb#Scene0");
 
-    loading.add(&font);
+    loading.add(&arcade_font);
+    loading.add(&freedom_font);
     loading.add(&tanuki_model);
     loading.add(&mushrooom2_model);
     loading.add(&tree_model);
