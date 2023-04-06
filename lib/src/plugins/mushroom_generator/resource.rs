@@ -1,5 +1,3 @@
-// Player info
-
 use bevy::{prelude::*, utils::HashSet};
 
 #[derive(Resource)]

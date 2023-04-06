@@ -26,10 +26,8 @@ pub fn read_animation_events(
 ) {
     for event in animation_transition_reader.iter() {
         for mut controller in &mut animation_controller_query {
-            if controller.parent_entity_id == event.entity_id {
-                if controller.current_clip != event.animation_name {
-                    controller.current_clip = event.animation_name.clone();
-                }
+            if controller.parent_entity_id == event.entity_id && controller.current_clip != event.animation_name {
+                controller.current_clip = event.animation_name.clone();
             }
         }
     }

@@ -1,6 +1,9 @@
-use crate::components::camera::MainCamera;
+use crate::components::camera::{MainCamera, MainCameraTarget};
 use crate::components::player::Player;
+use bevy::input::mouse::{MouseMotion, MouseWheel};
 use bevy::prelude::*;
+use bevy::window::PrimaryWindow;
+use std::f32::consts::PI;
 
 pub fn spawn_main_camera(mut commands: Commands) {
     commands
@@ -9,49 +12,64 @@ pub fn spawn_main_camera(mut commands: Commands) {
                 .looking_at(Vec3::ZERO, Vec3::Y),
             ..default()
         })
-        .insert(MainCamera::default());
+        .insert(MainCamera::new(None, 10.0, 0.05 * PI, 0.0, 10.0));
+
+    // .insert(MainCamera::default());
 }
+
+pub fn zoom_camera(
+    mut mouse_wheel_event_reader: EventReader<MouseWheel>,
+    // mouse_wheel_events: Res<Events<MouseWheel>>,
+    mut camera_query: Query<&mut MainCamera>,
+) {
+    let mut zoom = 0.0;
+    for event in mouse_wheel_event_reader.iter() {
+        zoom += event.y;
+    }
+    camera_query.get_single_mut().unwrap().add_distance(-zoom);
+}
+
 pub fn rotate_camera(
+    mut mouse_motion_event_reader: EventReader<MouseMotion>,
+    key_input: Res<Input<KeyCode>>,
+    mouse_button_input: Res<Input<MouseButton>>,
     mut camera_query: Query<&mut MainCamera>,
-    input: Res<Input<KeyCode>>,
-    time: Res<Time>,
+    mut windows: Query<&mut Window, With<PrimaryWindow>>,
 ) {
-    let mut camera = camera_query.single_mut();
+    let Ok(window) = windows.get_single_mut() else {
+        return;
+    };
 
-    if input.pressed(KeyCode::Q) {
-        camera.rotation += 90.0 * time.delta_seconds();
-    }
-
-    if input.pressed(KeyCode::E) {
-        camera.rotation -= 90.0 * time.delta_seconds();
-    }
-
-    if camera.rotation > 360.0 {
-        camera.rotation -= 360.0;
-    }
-
-    if camera.rotation < 0.0 {
-        camera.rotation += 360.0;
+    if mouse_button_input.pressed(MouseButton::Middle) || key_input.pressed(KeyCode::LShift) {
+        let mut yaw = 0.0;
+        let mut pitch = 0.0;
+        for event in mouse_motion_event_reader.iter() {
+            let (delta_yaw, delta_pitch) = event.delta.into();
+            yaw += delta_yaw;
+            pitch += delta_pitch;
+        }
+        let yaw = -yaw * 2.0 * PI / window.width();
+        let pitch = pitch * PI / window.height();
+        let mut orbit_camera = camera_query.get_single_mut().unwrap();
+        orbit_camera.add_yaw(yaw);
+        orbit_camera.add_pitch(pitch);
     }
 }
-pub fn update_camera_desired_position(
+
+pub fn update_camera(
     mut camera_query: Query<&mut MainCamera>,
-    player_query: Query<&Transform, With<Player>>,
+    target_query: Query<(Entity, &MainCameraTarget, &Transform)>,
+    player_query: Query<Entity, &Player>,
 ) {
-    let mut camera = camera_query.single_mut();
-    let player_transform = player_query.single();
-
-    let mut origin_transform = *player_transform;
-    origin_transform.rotation = Quat::default();
-    origin_transform.rotate_y(camera.rotation.to_radians());
-
-    let direction = origin_transform.forward().normalize_or_zero();
-    camera.look_target = player_transform.translation;
-
-    let desired_position =
-        origin_transform.translation + (direction * camera.offset.z) + (Vec3::Y * camera.offset.y);
-
-    camera.desired_position = desired_position;
+    let mut orbit_camera = camera_query.get_single_mut().unwrap();
+    if let Ok(player) = player_query.get_single() {
+        orbit_camera.set_target(Some(player));
+    }
+    if let Some(target_entity) = orbit_camera.target {
+        if let Ok(target_transform) = target_query.get(target_entity) {
+            orbit_camera.focus = target_transform.2.translation;
+        }
+    }
 }
 
 pub fn lerp_to_desired_position(
@@ -60,11 +78,10 @@ pub fn lerp_to_desired_position(
 ) {
     let (mut transform, camera) = camera_query.single_mut();
 
-    let lerped_position = transform.translation.lerp(
-        camera.desired_position,
-        time.delta_seconds() * camera.easing,
-    );
+    let lerped_position = transform
+        .translation
+        .lerp(camera.position(), time.delta_seconds() * camera.easing);
 
     transform.translation = lerped_position;
-    transform.look_at(camera.look_target, Vec3::Y);
+    transform.look_at(camera.focus, Vec3::Y);
 }
