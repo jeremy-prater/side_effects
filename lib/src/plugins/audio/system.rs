@@ -4,12 +4,14 @@ use bevy::prelude::*;
 use bevy_kira_audio::prelude::*;
 use std::time::Duration;
 
+const AUDIO_CROSSFADE_TIME: f32 = 2.0;
+
 pub fn audio_state_changed(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     state: Res<State<AudioState>>,
     audio: Res<Audio>,
-    mut audio_tracks: Option<ResMut<Assets<AudioInstance>>>,
+    audio_tracks: Option<ResMut<Assets<AudioInstance>>>,
     background_music: Option<Res<BackgroundMusic>>,
 ) {
     if !state.is_changed() {
@@ -18,9 +20,11 @@ pub fn audio_state_changed(
     info!("AudioState :: Audio state change to {:?}!", state);
 
     if let Some(mut audio_track) = audio_tracks {
-        if let Some(mut background_music) = background_music {
+        if let Some(background_music) = background_music {
             if let Some(instance) = audio_track.get_mut(&background_music.0) {
-                instance.stop(AudioTween::linear(Duration::from_secs(3)));
+                instance.stop(AudioTween::linear(Duration::from_secs_f32(
+                    AUDIO_CROSSFADE_TIME,
+                )));
             }
         }
     }
@@ -29,7 +33,9 @@ pub fn audio_state_changed(
         AudioState::MenuIntro => {
             let background_music = audio
                 .play(asset_server.load("audio/menu_intro.ogg"))
-                .fade_in(AudioTween::linear(Duration::from_secs(3)))
+                .fade_in(AudioTween::linear(Duration::from_secs_f32(
+                    AUDIO_CROSSFADE_TIME,
+                )))
                 .handle();
 
             commands.insert_resource(BackgroundMusic(background_music));
@@ -45,7 +51,9 @@ pub fn audio_state_changed(
         AudioState::AmbientIntro => {
             let background_music = audio
                 .play(asset_server.load("audio/ambient_intro.ogg"))
-                .fade_in(AudioTween::linear(Duration::from_secs(3)))
+                .fade_in(AudioTween::linear(Duration::from_secs_f32(
+                    AUDIO_CROSSFADE_TIME,
+                )))
                 .handle();
 
             commands.insert_resource(BackgroundMusic(background_music));
@@ -61,7 +69,9 @@ pub fn audio_state_changed(
         AudioState::GoodIntro => {
             let background_music = audio
                 .play(asset_server.load("audio/good_intro.ogg"))
-                .fade_in(AudioTween::linear(Duration::from_secs(3)))
+                .fade_in(AudioTween::linear(Duration::from_secs_f32(
+                    AUDIO_CROSSFADE_TIME,
+                )))
                 .handle();
 
             commands.insert_resource(BackgroundMusic(background_music));
@@ -77,7 +87,9 @@ pub fn audio_state_changed(
         AudioState::BadIntro => {
             let background_music = audio
                 .play(asset_server.load("audio/bad_intro.ogg"))
-                .fade_in(AudioTween::linear(Duration::from_secs(3)))
+                .fade_in(AudioTween::linear(Duration::from_secs_f32(
+                    AUDIO_CROSSFADE_TIME,
+                )))
                 .handle();
 
             commands.insert_resource(BackgroundMusic(background_music));

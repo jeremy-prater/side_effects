@@ -1,30 +1,30 @@
 use bevy::prelude::*;
 
 pub mod animation;
+pub mod audio;
 pub mod camera;
-pub mod lighting;
 pub mod loading;
 pub mod main_menu;
 pub mod mouse_capture;
 pub mod movement;
 pub mod mushroom_generator;
 pub mod player;
+pub mod sun;
 pub mod terrain;
 pub mod tree_generator;
-pub mod audio;
 
 pub use animation::*;
+pub use audio::*;
 pub use camera::*;
-pub use lighting::*;
 pub use loading::*;
 pub use main_menu::*;
 pub use mouse_capture::*;
 pub use movement::*;
 pub use mushroom_generator::*;
 pub use player::*;
+pub use sun::*;
 pub use terrain::*;
 pub use tree_generator::*;
-pub use audio::*;
 
 pub use crate::states::game_state::{debug_game_state_changes, GameState};
 
@@ -42,9 +42,9 @@ impl Plugin for SideEffectsPlugin {
             .add_plugin(MainMenuPlugin)
             .add_plugin(MovementPlugin)
             .add_plugin(MushroomGeneratorPlugin)
-            .add_plugin(LightingPlugin)
+            .add_plugin(SunPlugin)
             .add_plugin(GameAudioPlugin)
             .add_system(debug_game_state_changes);
-            // .add_system(cursor_grab_system);
+        // .add_system(cursor_grab_system);
     }
 }

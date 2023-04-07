@@ -57,7 +57,9 @@ noise = "0.8.2"
 iyes_progress = { version = "0.8", features = [ "assets" ] }
 log = "0.4.17"
 rand = "0.8.5"
-bevy_kira_audio = { version = "0.15.0", features = ["wav"] }
+bevy_kira_audio = "0.15.0"
+colorgrad = "0.6.2"
+bevy_atmosphere = "0.6.0"
 
 # keep the following in sync with Bevy's dependencies
 winit = { version = "0.28", default-features = false }
