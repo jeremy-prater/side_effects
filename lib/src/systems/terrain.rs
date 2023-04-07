@@ -14,6 +14,6 @@ pub fn spawn_terrain(
             transform: Transform::from_xyz(0.0, -1.0, 0.0),
             ..default()
         })
-        .insert(Collider::cuboid(1000.0, 0.5, 1000.0))
+        .insert(Collider::cuboid(500.0, 0.5, 500.0))
         .insert(RigidBody::Fixed);
 }
