@@ -1,12 +1,11 @@
-use bevy::prelude::*;
-use bevy_rapier3d::prelude::*;
-
 use crate::components::{
     animation::AnimationMarker,
     movement::{Direction, Momentum},
     player::Player,
 };
 use crate::plugins::camera::component::MainCameraTarget;
+use bevy::prelude::*;
+use bevy_rapier3d::prelude::*;
 
 pub fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands
@@ -19,7 +18,7 @@ pub fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>) {
         .insert(RigidBody::Dynamic)
         .insert(Velocity::default())
         .insert(LockedAxes::ROTATION_LOCKED)
-        .insert(Collider::capsule_y(0.5, 0.5))
+        .insert(Collider::capsule_y(0.25, 0.25))
         .insert(Direction::default())
         .insert(Momentum::default())
         .insert(MainCameraTarget)
@@ -32,5 +31,6 @@ pub fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>) {
             combine_rule: CoefficientCombineRule::Average,
         })
         .insert(GravityScale(1.0))
+        .insert(Name::new("Player"))
         .insert(Player);
 }
