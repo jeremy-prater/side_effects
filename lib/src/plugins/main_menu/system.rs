@@ -111,6 +111,9 @@ pub fn main_menu_ui_system(
                 commands.insert_resource(NextState(Some(
                     crate::states::game_state::GameState::InGame,
                 )));
+                commands.insert_resource(NextState(Some(
+                    crate::plugins::audio::state::AudioState::AmbientIntro,
+                )));
             }
             Interaction::Hovered => {
                 text.sections[0].value = "Start".to_string();
