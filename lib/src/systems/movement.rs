@@ -1,8 +1,8 @@
 use crate::components::{
-    camera::MainCamera,
     movement::{Direction, Momentum},
     player::Player,
 };
+use crate::plugins::camera::component::MainCamera;
 use crate::events::animation::AnimationTransitionEvent;
 
 use crate::resources::player::PlayerSpeed;

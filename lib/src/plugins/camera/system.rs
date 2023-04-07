@@ -1,17 +1,21 @@
-use crate::components::camera::{MainCamera, MainCameraTarget};
+use super::component::*;
 use crate::components::player::Player;
 use bevy::input::mouse::{MouseMotion, MouseWheel};
 use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
+use bevy_atmosphere::prelude::*;
 use std::f32::consts::PI;
 
 pub fn spawn_main_camera(mut commands: Commands) {
     commands
-        .spawn(Camera3dBundle {
-            transform: Transform::from_translation(Vec3::splat(10.0))
-                .looking_at(Vec3::ZERO, Vec3::Y),
-            ..default()
-        })
+        .spawn((
+            Camera3dBundle {
+                transform: Transform::from_translation(Vec3::splat(10.0))
+                    .looking_at(Vec3::ZERO, Vec3::Y),
+                ..default()
+            },
+            AtmosphereCamera::default(),
+        ))
         .insert(MainCamera::new(None, 10.0, 0.05 * PI, 0.0, 10.0));
 
     // .insert(MainCamera::default());

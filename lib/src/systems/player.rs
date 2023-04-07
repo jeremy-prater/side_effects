@@ -4,8 +4,9 @@ use bevy_rapier3d::prelude::*;
 use crate::components::{
     animation::AnimationMarker,
     movement::{Direction, Momentum},
-    player::Player, camera::MainCameraTarget,
+    player::Player,
 };
+use crate::plugins::camera::component::MainCameraTarget;
 
 pub fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands
