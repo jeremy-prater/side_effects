@@ -11,6 +11,7 @@ pub mod mushroom_generator;
 pub mod player;
 pub mod terrain;
 pub mod tree_generator;
+pub mod audio;
 
 pub use animation::*;
 pub use camera::*;
@@ -23,6 +24,7 @@ pub use mushroom_generator::*;
 pub use player::*;
 pub use terrain::*;
 pub use tree_generator::*;
+pub use audio::*;
 
 pub use crate::states::game_state::{debug_game_state_changes, GameState};
 
@@ -41,6 +43,7 @@ impl Plugin for SideEffectsPlugin {
             .add_plugin(MovementPlugin)
             .add_plugin(MushroomGeneratorPlugin)
             .add_plugin(LightingPlugin)
+            .add_plugin(GameAudioPlugin)
             .add_system(debug_game_state_changes);
             // .add_system(cursor_grab_system);
     }

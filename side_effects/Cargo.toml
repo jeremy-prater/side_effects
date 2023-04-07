@@ -1,27 +1,69 @@
 [package]
-name = "side_effects"
+name = "the_tankui_trip"
 version = "0.1.0"
+publish = false
+authors = ["silverevo <silverevo03@gmail.com>"]
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-[lib]
-crate-type = ["cdylib", "rlib"]
-
-[dependencies]
-bevy = "0.10.1"
-bevy_rapier3d = "0.21.0"
-wasm-bindgen = "0.2.84"
-console_error_panic_hook = "0.1"
-side_effects_lib = { path = "../lib" }
-
-[target.wasm32-unknown-unknown]
-runner = "wasm-server-runner"
+# exclude = ["dist", "build", "assets", "credits"]
 
 [profile.dev.package."*"]
 opt-level = 3
 
+[profile.dev]
+opt-level = 1
+
 [profile.release]
-# opt-level = 's'
-# opt-level = 'z'
-opt-level = 's'
+lto = true
+codegen-units = 1
+
+# The profile that 'cargo dist' will build with
+[profile.dist]
+inherits = "release"
 lto = "thin"
+
+[features]
+dev = [
+    "bevy/bevy_dylib",
+]
+
+# Bevy defaults minus audio and some other not needed things
+# see https://github.com/bevyengine/bevy/blob/main/Cargo.toml#L31-L54
+default = [
+    "bevy/animation",
+    "bevy/bevy_asset",
+    "bevy/bevy_scene",
+    "bevy/bevy_winit",
+    "bevy/bevy_core_pipeline",
+    "bevy/bevy_pbr",
+    "bevy/bevy_gltf",
+    "bevy/bevy_render",
+    "bevy/bevy_sprite",
+    "bevy/bevy_text",
+    "bevy/bevy_ui",
+    "bevy/png",
+    "bevy/hdr",
+    "bevy/zstd",
+    "bevy/x11",
+    "bevy/ktx2",
+    "bevy/filesystem_watcher",
+    "bevy/tonemapping_luts",
+
+]
+
+[dependencies]
+bevy = { version = "0.10.1", default-features = false }
+bevy_rapier3d = "0.21.0"
+leafwing-input-manager = "0.9.1"
+noise = "0.8.2"
+iyes_progress = { version = "0.8", features = [ "assets" ] }
+log = "0.4.17"
+rand = "0.8.5"
+bevy_kira_audio = "0.15.0"
+the_tanuki_trip_lib = { path = "../lib" }
+
+# keep the following in sync with Bevy's dependencies
+winit = { version = "0.28", default-features = false }
+image = { version = "0.24", default-features = false }
+
+[build-dependencies]
+embed-resource = "1.4"

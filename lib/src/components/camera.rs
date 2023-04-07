@@ -1,6 +1,5 @@
-use std::f32::consts::PI;
-
 use bevy::prelude::*;
+use std::f32::consts::PI;
 
 #[derive(Component)]
 pub struct MainCameraTarget;

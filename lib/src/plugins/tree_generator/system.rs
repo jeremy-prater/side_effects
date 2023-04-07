@@ -107,11 +107,12 @@ pub fn spawn_trees(
                 }
             }
         }
+    }
 
-        for (entity, transform) in despawner.iter() {
-            if transform.translation.distance(origin) > (TREE_X_SPAWN_RANGE + TREE_Z_SPAWN_RANGE) as f32 {
-                commands.entity(entity).despawn_recursive();
-            }
+    for (entity, transform) in despawner.iter() {
+        if transform.translation.distance(origin) > (TREE_X_SPAWN_RANGE + TREE_Z_SPAWN_RANGE) as f32
+        {
+            commands.entity(entity).despawn_recursive();
         }
     }
 }

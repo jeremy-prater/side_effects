@@ -117,11 +117,13 @@ pub fn spawn_mushroom(
                 }
             }
         }
+    }
 
-        for (entity, transform) in despawner.iter() {
-            if transform.translation.distance(origin) > (MUSHROOM_X_SPAWN_RANGE + MUSHROOM_Z_SPAWN_RANGE) as f32 {
-                commands.entity(entity).despawn_recursive();
-            }
+    for (entity, transform) in despawner.iter() {
+        if transform.translation.distance(origin)
+            > (MUSHROOM_X_SPAWN_RANGE + MUSHROOM_Z_SPAWN_RANGE) as f32
+        {
+            commands.entity(entity).despawn_recursive();
         }
     }
 }
