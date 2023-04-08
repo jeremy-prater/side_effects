@@ -1,5 +1,6 @@
-use super::resource::MushroomDatabase;
-use crate::components::{mushroom::Mushroom, player::Player};
+use super::component::*;
+use super::resource::*;
+use crate::components::player::Player;
 use bevy::prelude::*;
 use bevy::utils::HashSet;
 use bevy_rapier3d::prelude::*;
@@ -7,11 +8,11 @@ use noise::{NoiseFn, Perlin};
 use rand::prelude::*;
 use std::f32::consts::PI;
 
-const MUSHROOM_X_SPAWN_RANGE: i32 = 100;
-const MUSHROOM_Z_SPAWN_RANGE: i32 = 100;
-const MUSHROOM_RADIUS_SPAWN_STEP: usize = 10;
-const MUSHROOM_RENDER_SCALE: f32 = 0.30;
-const MUSHROOM_NOISE_SCALE: f64 = 1.0 / 250.0;
+const MUSHROOM_X_SPAWN_RANGE: i32 = 128;
+const MUSHROOM_Z_SPAWN_RANGE: i32 = 128;
+const MUSHROOM_RADIUS_SPAWN_STEP: usize = 8;
+const MUSHROOM_RENDER_SCALE: f32 = 0.15;
+const MUSHROOM_NOISE_SCALE: f64 = 1.0 / 256.0;
 
 const MUSHROOM_GEN_LOW: f32 = 0.5;
 const MUSHROOM_GEN_HIGH: f32 = 0.7;
@@ -124,6 +125,10 @@ pub fn spawn_mushroom(
             > (MUSHROOM_X_SPAWN_RANGE + MUSHROOM_Z_SPAWN_RANGE) as f32
         {
             commands.entity(entity).despawn_recursive();
+            mushroom_db.mushroom_locations.remove(&(
+                transform.translation.x as i32,
+                transform.translation.z as i32,
+            ));
         }
     }
 }

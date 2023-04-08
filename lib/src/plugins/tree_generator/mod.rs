@@ -1,5 +1,6 @@
 pub mod resource;
 pub mod system;
+pub mod component;
 
 use crate::states::game_state::GameState;
 use bevy::prelude::*;
