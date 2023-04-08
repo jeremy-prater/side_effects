@@ -3,10 +3,18 @@ use crate::components::player::Player;
 use bevy::input::mouse::{MouseMotion, MouseWheel};
 use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
-use bevy_atmosphere::prelude::*;
 use std::f32::consts::PI;
 
+#[cfg(not(target_arch = "wasm32"))]
+use bevy_atmosphere::prelude::*;
+
 pub fn spawn_main_camera(mut commands: Commands) {
+    #[cfg(target_arch = "wasm32")]
+    commands
+        .spawn(Camera3dBundle::default())
+        .insert(MainCamera::new(None, 10.0, 0.05 * PI, -PI / 2.0, 10.0));
+
+    #[cfg(not(target_arch = "wasm32"))]
     commands
         .spawn((Camera3dBundle::default(), AtmosphereCamera::default()))
         .insert(MainCamera::new(None, 10.0, 0.05 * PI, -PI / 2.0, 10.0));

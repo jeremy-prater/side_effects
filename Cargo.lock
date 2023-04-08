@@ -3600,6 +3600,7 @@ dependencies = [
  "bevy",
  "bevy_kira_audio",
  "bevy_rapier3d",
+ "console_error_panic_hook",
  "embed-resource",
  "image",
  "iyes_progress",
