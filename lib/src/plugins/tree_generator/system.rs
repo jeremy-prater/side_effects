@@ -1,6 +1,6 @@
+use super::component::*;
 use super::resource::TreeDatabase;
 use crate::components::player::Player;
-use crate::components::tree::Tree;
 use bevy::prelude::*;
 use bevy::utils::HashSet;
 use bevy_rapier3d::prelude::*;
@@ -8,11 +8,11 @@ use noise::{NoiseFn, Perlin};
 use rand::prelude::*;
 use std::f32::consts::PI;
 
-const TREE_X_SPAWN_RANGE: i32 = 250;
-const TREE_Z_SPAWN_RANGE: i32 = 250;
-const TREE_RADIUS_SPAWN_STEP: usize = 25;
+const TREE_X_SPAWN_RANGE: i32 = 256;
+const TREE_Z_SPAWN_RANGE: i32 = 256;
+const TREE_RADIUS_SPAWN_STEP: usize = 32;
 const TREE_RENDER_SCALE: f32 = 0.70;
-const TREE_NOISE_SCALE: f64 = 1.0 / 250.0;
+const TREE_NOISE_SCALE: f64 = 1.0 / 256.0;
 
 const TREE_GEN_LOW: f32 = 0.3;
 const TREE_GEN_HIGH: f32 = 0.7;
@@ -21,7 +21,7 @@ const TREE_ROTATE: f32 = 0.05;
 const TREE_X_JITTER: f32 = 10.0;
 const TREE_Z_JITTER: f32 = 10.0;
 
-const MAX_TREES: usize = 2048;
+const MAX_TREES: usize = 1024;
 
 pub fn init_trees(mut commands: Commands) {
     commands.insert_resource(TreeDatabase {
@@ -113,6 +113,10 @@ pub fn spawn_trees(
         if transform.translation.distance(origin) > (TREE_X_SPAWN_RANGE + TREE_Z_SPAWN_RANGE) as f32
         {
             commands.entity(entity).despawn_recursive();
+            trees_db.tree_locations.remove(&(
+                transform.translation.x as i32,
+                transform.translation.z as i32,
+            ));
         }
     }
 }

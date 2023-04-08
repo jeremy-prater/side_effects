@@ -1,4 +1,4 @@
-use crate::components::mushroom::{ActiveMushroomEffect, MushroomEffect};
+use crate::plugins::mushroom_generator::component::*;
 use bevy::prelude::*;
 use std::collections::{HashSet, VecDeque};
 
