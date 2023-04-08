@@ -60,6 +60,7 @@ log = "0.4.17"
 rand = "0.8.5"
 bevy_kira_audio = "0.15.0"
 the_tanuki_trip_lib = { path = "../lib" }
+console_error_panic_hook = "0.1"
 
 # keep the following in sync with Bevy's dependencies
 winit = { version = "0.28", default-features = false }

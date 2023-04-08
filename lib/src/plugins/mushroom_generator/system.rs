@@ -108,8 +108,8 @@ pub fn spawn_mushroom(
                     .insert(RigidBody::Fixed)
                     .insert(LockedAxes::ROTATION_LOCKED)
                     .insert(Collider::cylinder(
-                        1.5,
-                        (3.0 * MUSHROOM_RENDER_SCALE).max(3.0),
+                        3.0,
+                        (4.0 * MUSHROOM_RENDER_SCALE).max(3.0),
                     ))
                     .insert(Selectable)
                     .insert(Mushroom::default());

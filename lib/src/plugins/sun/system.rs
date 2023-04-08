@@ -3,6 +3,8 @@ use std::{f32::consts::PI, time::Duration};
 use super::component::*;
 use super::resource::*;
 use bevy::prelude::*;
+
+#[cfg(not(target_arch = "wasm32"))]
 use bevy_atmosphere::prelude::*;
 
 const DAY_LENGTH: Duration = Duration::from_secs(60 * 5);
@@ -33,9 +35,11 @@ pub fn spawn_sun(mut commands: Commands) {
 
 pub fn update_sun(
     mut sun: Query<(&mut Sun, &mut DirectionalLight, &mut Transform)>,
-    mut atmosphere: AtmosphereMut<Nishita>,
-    mut atmo_counter: ResMut<AtmosphereCounter>,
     time: Res<Time>,
+    #[cfg(not(target_arch = "wasm32"))]
+    mut atmosphere: AtmosphereMut<Nishita>,
+    #[cfg(not(target_arch = "wasm32"))]
+    mut atmo_counter: ResMut<AtmosphereCounter>,
 ) {
     let (mut sun, mut light, mut transform) = sun.get_single_mut().unwrap();
     let sun_gradient = colorgrad::magma();
@@ -68,6 +72,7 @@ pub fn update_sun(
     *transform = Transform::from_xyz(sun_position.x, sun_position.y, sun_position.z);
     transform.look_at(Vec3::ZERO, Vec3::Y);
 
+    #[cfg(not(target_arch = "wasm32"))]
     if atmo_counter.next() {
         atmosphere.sun_position = sun_position;
         atmosphere.sun_intensity = 22.0 * gradient_pos;
