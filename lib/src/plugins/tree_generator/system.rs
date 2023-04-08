@@ -10,7 +10,7 @@ use std::f32::consts::PI;
 
 const TREE_X_SPAWN_RANGE: i32 = 256;
 const TREE_Z_SPAWN_RANGE: i32 = 256;
-const TREE_RADIUS_SPAWN_STEP: usize = 32;
+const TREE_RADIUS_SPAWN_STEP: usize = 16;
 const TREE_RENDER_SCALE: f32 = 0.70;
 const TREE_NOISE_SCALE: f64 = 1.0 / 256.0;
 
@@ -80,7 +80,7 @@ pub fn spawn_trees(
                         scene: trees_model.clone(),
                         transform: Transform::from_translation(Vec3::new(
                             x as f32 + rand::thread_rng().gen_range(-TREE_X_JITTER..TREE_X_JITTER),
-                            0.0,
+                            -0.5,
                             z as f32 + rand::thread_rng().gen_range(-TREE_Z_JITTER..TREE_Z_JITTER),
                         ))
                         .with_rotation(Quat::from_euler(
@@ -98,7 +98,7 @@ pub fn spawn_trees(
                     })
                     .insert(RigidBody::Fixed)
                     .insert(LockedAxes::ROTATION_LOCKED)
-                    .insert(Collider::cylinder(1.0, (1.5 * TREE_RENDER_SCALE).max(4.0)))
+                    .insert(Collider::cylinder(0.5, (1.5 * TREE_RENDER_SCALE).max(4.0)))
                     .insert(Tree::default());
 
                 generate_count -= 1;

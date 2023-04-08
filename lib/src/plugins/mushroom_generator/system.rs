@@ -11,15 +11,15 @@ use std::f32::consts::PI;
 const MUSHROOM_X_SPAWN_RANGE: i32 = 128;
 const MUSHROOM_Z_SPAWN_RANGE: i32 = 128;
 const MUSHROOM_RADIUS_SPAWN_STEP: usize = 8;
-const MUSHROOM_RENDER_SCALE: f32 = 0.15;
+const MUSHROOM_RENDER_SCALE: f32 = 0.25;
 const MUSHROOM_NOISE_SCALE: f64 = 1.0 / 256.0;
 
-const MUSHROOM_GEN_LOW: f32 = 0.5;
-const MUSHROOM_GEN_HIGH: f32 = 0.7;
+const MUSHROOM_GEN_LOW: f32 = 0.70;
+const MUSHROOM_GEN_HIGH: f32 = 0.85;
 
 const MUSHROOM_ROTATE: f32 = 0.05;
-const MUSHROOM_X_JITTER: f32 = 2.0;
-const MUSHROOM_Z_JITTER: f32 = 2.0;
+const MUSHROOM_X_JITTER: f32 = 4.0;
+const MUSHROOM_Z_JITTER: f32 = 4.0;
 
 const MAX_MUSHROOMS: usize = 256;
 
@@ -86,7 +86,7 @@ pub fn spawn_mushroom(
                             x as f32
                                 + rand::thread_rng()
                                     .gen_range(-MUSHROOM_X_JITTER..MUSHROOM_X_JITTER),
-                            0.0,
+                            -0.5,
                             z as f32
                                 + rand::thread_rng()
                                     .gen_range(-MUSHROOM_Z_JITTER..MUSHROOM_Z_JITTER),
@@ -107,7 +107,7 @@ pub fn spawn_mushroom(
                     .insert(RigidBody::Fixed)
                     .insert(LockedAxes::ROTATION_LOCKED)
                     .insert(Collider::cylinder(
-                        1.0,
+                        0.5,
                         (2.0 * MUSHROOM_RENDER_SCALE).max(3.0),
                     ))
                     .insert(Mushroom::default());

@@ -20,9 +20,9 @@ pub fn init_terrain(mut commands: Commands) {
 pub fn spawn_terrain(
     mut commands: Commands,
     mut terrain_db: ResMut<TerrainDatabase>,
-    asset_server: Res<AssetServer>,
+    _asset_server: Res<AssetServer>,
     player_query: Query<&Transform, &Player>,
-    query: Query<&Terrain>,
+    _query: Query<&Terrain>,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
     despawner: Query<(Entity, &Transform), With<Terrain>>,
@@ -78,7 +78,7 @@ pub fn spawn_terrain(
                             TERRAIN_RADIUS_SPAWN_STEP as f32,
                         ))),
                         material: materials.add(StandardMaterial {
-                            base_color: bevy_color.into(),
+                            base_color: bevy_color,
                             perceptual_roughness : 0.9,
                             ..default()
                         }),
