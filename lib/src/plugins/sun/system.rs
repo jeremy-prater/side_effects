@@ -1,6 +1,7 @@
 use std::{f32::consts::PI, time::Duration};
 
 use super::component::*;
+use super::resource::*;
 use bevy::prelude::*;
 use bevy_atmosphere::prelude::*;
 
@@ -24,11 +25,16 @@ pub fn spawn_sun(mut commands: Commands) {
             ..default()
         })
         .insert(Sun::default());
+
+    commands.insert_resource(AtmosphereCounter {
+        count: 0,
+    });
 }
 
 pub fn update_sun(
     mut sun: Query<(&mut Sun, &mut DirectionalLight, &mut Transform)>,
     mut atmosphere: AtmosphereMut<Nishita>,
+    mut atmo_counter: ResMut<AtmosphereCounter>,
     time: Res<Time>,
 ) {
     let (mut sun, mut light, mut transform) = sun.get_single_mut().unwrap();
@@ -55,13 +61,15 @@ pub fn update_sun(
     // Curve for sunlight angle
     // https://www.desmos.com/calculator/2njavqj7rg
     let sun_angle_x = 10.0 - (percent_of_day * 20.0);
-    let sun_angle_y = f32::sin(percent_of_day * PI).powf(2.0/1.0) * 20.0;
+    let sun_angle_y = f32::sin(percent_of_day * PI).powf(2.0 / 1.0) * 20.0;
 
     let sun_position = Vec3::from_slice(&[sun_angle_x, sun_angle_y, 1.0]);
 
     *transform = Transform::from_xyz(sun_position.x, sun_position.y, sun_position.z);
     transform.look_at(Vec3::ZERO, Vec3::Y);
 
-    atmosphere.sun_position = sun_position;
-    atmosphere.sun_intensity = 22.0 * gradient_pos;
+    if atmo_counter.next() {
+        atmosphere.sun_position = sun_position;
+        atmosphere.sun_intensity = 22.0 * gradient_pos;
+    }
 }
