@@ -4,7 +4,7 @@ pub mod system;
 
 use crate::states::game_state::GameState;
 use bevy::prelude::*;
-use resource::*;
+
 use system::*;
 
 pub struct TerrainPlugin;
