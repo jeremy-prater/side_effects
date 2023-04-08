@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_egui::EguiPlugin;
 
 pub mod animation;
 pub mod audio;
@@ -9,6 +10,7 @@ pub mod mouse_capture;
 pub mod movement;
 pub mod mushroom_generator;
 pub mod player;
+pub mod selection;
 pub mod sun;
 pub mod terrain;
 pub mod tree_generator;
@@ -22,6 +24,7 @@ pub use mouse_capture::*;
 pub use movement::*;
 pub use mushroom_generator::*;
 pub use player::*;
+pub use selection::*;
 pub use sun::*;
 pub use terrain::*;
 pub use tree_generator::*;
@@ -33,6 +36,7 @@ pub struct SideEffectsPlugin;
 impl Plugin for SideEffectsPlugin {
     fn build(&self, app: &mut App) {
         app.add_state::<GameState>()
+            .add_plugin(EguiPlugin)
             .add_plugin(AssetLoaderPlugin)
             .add_plugin(AnimationPlugin)
             .add_plugin(CameraPlugin)
@@ -42,6 +46,8 @@ impl Plugin for SideEffectsPlugin {
             .add_plugin(MainMenuPlugin)
             .add_plugin(MovementPlugin)
             .add_plugin(MushroomGeneratorPlugin)
+            .add_plugin(SelectionPlugin)
+            .add_plugin(DebugSelectionInputPlugin)
             .add_plugin(SunPlugin)
             .add_plugin(GameAudioPlugin)
             .add_system(debug_game_state_changes);

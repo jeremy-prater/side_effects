@@ -51,6 +51,8 @@ default = [
 
 [dependencies]
 bevy = { version = "0.10.1", default-features = false }
+bevy_egui = "0.20"
+bevy_mod_outline = "0.4"
 bevy_rapier3d = { version = "0.21.0", default-features = false }
 leafwing-input-manager = "0.9.1"
 noise = "0.8.2"

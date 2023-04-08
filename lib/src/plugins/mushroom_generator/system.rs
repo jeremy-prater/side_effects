@@ -1,6 +1,7 @@
 use super::component::*;
 use super::resource::*;
 use crate::components::player::Player;
+use crate::plugins::Selectable;
 use bevy::prelude::*;
 use bevy::utils::HashSet;
 use bevy_rapier3d::prelude::*;
@@ -110,6 +111,7 @@ pub fn spawn_mushroom(
                         1.5,
                         (3.0 * MUSHROOM_RENDER_SCALE).max(3.0),
                     ))
+                    .insert(Selectable)
                     .insert(Mushroom::default());
 
                 generate_count -= 1;
