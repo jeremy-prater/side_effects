@@ -11,7 +11,7 @@ pub struct GameUIPlugin;
 
 impl Plugin for GameUIPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugin(KayakContextPlugin).add_plugin(KayakWidgets);
+        // app.add_plugin(KayakContextPlugin).add_plugin(KayakWidgets);
         // .add_system(setup_game_ui.in_schedule(OnEnter(GameState::InGame)));
     }
 }

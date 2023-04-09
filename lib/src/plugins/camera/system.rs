@@ -4,14 +4,17 @@ use crate::plugins::game_ui::resource::*;
 use bevy::input::mouse::{MouseMotion, MouseWheel};
 use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
-use kayak_ui::prelude::*;
-use kayak_ui::widgets::KayakWidgetsContextPlugin;
+use kayak_ui::{prelude::*, widgets::*};
 use std::f32::consts::PI;
 
 #[cfg(not(target_arch = "wasm32"))]
 use bevy_atmosphere::prelude::*;
 
-pub fn spawn_main_camera(mut commands: Commands) {
+pub fn spawn_main_camera(
+    mut commands: Commands,
+    mut font_mapping: ResMut<FontMapping>,
+    asset_server: Res<AssetServer>,
+) {
     let main_camera = commands
         .spawn((
             Camera3dBundle::default(),
@@ -19,11 +22,29 @@ pub fn spawn_main_camera(mut commands: Commands) {
             AtmosphereCamera::default(),
         ))
         .insert(MainCamera::new(None, 10.0, 0.05 * PI, -PI / 2.0, 10.0))
+        .insert(CameraUIKayak)
         .id();
+
+    font_mapping.set_default(asset_server.load("fonts/arcade.ttf"));
+    // font_mapping.force_subpixel(&asset_server.load("fonts/arcade.ttf"));
 
     let mut widget_context = KayakRootContext::new(main_camera);
     widget_context.add_plugin(KayakWidgetsContextPlugin);
+    let parent_id = None;
 
+    rsx! {
+        <KayakAppBundle>
+            <TextWidgetBundle
+                text={TextProps {
+                    content: "Hello World".into(),
+                    size: 20.0,
+                    ..Default::default()
+                }}
+            />
+        </KayakAppBundle>
+    };
+
+    commands.spawn((widget_context, EventDispatcher::default()));
 }
 
 pub fn zoom_camera(
