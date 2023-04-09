@@ -1,8 +1,6 @@
-
-
 use crate::components::{
     animation::AnimationMarker,
-    movement::{Direction, Momentum},
+    movement::{Direction, Momentum, MovingCharacter},
     player::Player,
 };
 use crate::plugins::camera::component::MainCameraTarget;
@@ -23,6 +21,7 @@ pub fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>) {
         .insert(Collider::capsule_y(0.25, 0.25))
         .insert(Direction::default())
         .insert(Momentum::default())
+        .insert(MovingCharacter)
         .insert(MainCameraTarget)
         .insert(Damping {
             linear_damping: 0.2,
