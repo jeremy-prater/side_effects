@@ -54,10 +54,13 @@ bevy = { version = "0.10.1", default-features = false }
 bevy_egui = "0.20"
 bevy_mod_outline = "0.4"
 bevy_rapier3d = { version = "0.21.0", default-features = false }
+bevy_sprite3d = "2"
+big-brain = "0.17"
 leafwing-input-manager = "0.9.1"
 noise = "0.8.2"
 iyes_progress = { version = "0.8", features = [ "assets" ] }
 log = "0.4.17"
+oxidized_navigation = "0.3"
 rand = "0.8.5"
 bevy_kira_audio = "0.15.0"
 colorgrad = "0.6.2"
