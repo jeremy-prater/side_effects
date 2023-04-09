@@ -1,6 +1,6 @@
 use super::component::*;
 use super::resource::TreeDatabase;
-use crate::components::player::Player;
+use crate::plugins::player::component::*;
 use bevy::prelude::*;
 use bevy::utils::HashSet;
 use bevy_rapier3d::prelude::*;

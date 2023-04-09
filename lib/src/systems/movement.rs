@@ -1,12 +1,10 @@
 use crate::components::{
     animation::AnimationMarker,
     movement::{Direction, Momentum, MovingCharacter},
-    player::Player,
 };
 use crate::events::animation::AnimationTransitionEvent;
 use crate::plugins::camera::component::MainCamera;
-
-use crate::resources::player::PlayerSpeed;
+use crate::plugins::player::{component::*, resource::*};
 use bevy::prelude::*;
 use bevy_rapier3d::prelude::*;
 

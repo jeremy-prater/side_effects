@@ -1,28 +1,21 @@
 use super::component::*;
-use crate::components::player::Player;
+use crate::plugins::player::component::*;
 use bevy::input::mouse::{MouseMotion, MouseWheel};
 use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
-use kayak_ui::prelude::*;
-use kayak_ui::widgets::KayakWidgetsContextPlugin;
 use std::f32::consts::PI;
 
 #[cfg(not(target_arch = "wasm32"))]
 use bevy_atmosphere::prelude::*;
 
 pub fn spawn_main_camera(mut commands: Commands) {
-    let main_camera = commands
+    commands
         .spawn((
             Camera3dBundle::default(),
             #[cfg(not(target_arch = "wasm32"))]
             AtmosphereCamera::default(),
         ))
-        .insert(MainCamera::new(None, 10.0, 0.05 * PI, -PI / 2.0, 10.0))
-        .id();
-
-    let mut widget_context = KayakRootContext::new(main_camera);
-    widget_context.add_plugin(KayakWidgetsContextPlugin);
-
+        .insert(MainCamera::new(None, 10.0, 0.05 * PI, -PI / 2.0, 10.0));
 }
 
 pub fn zoom_camera(

@@ -1,9 +1,13 @@
-use crate::components::{
-    animation::AnimationMarker,
-    movement::{Direction, Momentum, MovingCharacter},
-    player::Player,
-};
+use super::component::*;
+use crate::components::movement::MovingCharacter;
 use crate::plugins::camera::component::MainCameraTarget;
+use crate::{
+    components::{
+        animation::AnimationMarker,
+        movement::{Direction, Momentum},
+    },
+    plugins::Selectable,
+};
 use bevy::prelude::*;
 use bevy_rapier3d::prelude::*;
 
@@ -33,5 +37,12 @@ pub fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>) {
         })
         .insert(GravityScale(1.0))
         .insert(Name::new("Player"))
-        .insert(Player);
+        .insert(Player::default())
+        .insert(Selectable);
+}
+
+pub fn player_health(mut player : Query<&mut Player>, time: Res<Time>) {
+    if let Ok(mut player) = player.get_single_mut() {
+        player.hp -= time.delta_seconds() * 0.5;
+    }
 }

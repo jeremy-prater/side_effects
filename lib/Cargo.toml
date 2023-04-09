@@ -63,7 +63,6 @@ bevy_kira_audio = "0.15.0"
 colorgrad = "0.6.2"
 bevy_atmosphere = "0.6.0"
 bevy_ninepatch = "0.10.0"
-kayak_ui = { git = "https://github.com/StarArawn/kayak_ui.git", branch = "main" }
 
 # keep the following in sync with Bevy's dependencies
 winit = { version = "0.28", default-features = false }

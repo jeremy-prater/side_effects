@@ -24,7 +24,6 @@ pub fn load_game_assets(asset_server: Res<AssetServer>, mut loading: ResMut<Asse
     // Trees
     let tree_model: Handle<Scene> = asset_server.load("models/tree_1.glb#Scene0");
     loading.add(&tree_model);
-    
     // Music
     let ambient_intro: Handle<AudioSource> = asset_server.load("audio/ambient_intro.ogg");
     loading.add(&ambient_intro);
@@ -52,8 +51,8 @@ pub fn load_game_assets(asset_server: Res<AssetServer>, mut loading: ResMut<Asse
     loading.add(move_icon);
     let pick_icon: Handle<Image> = asset_server.load("icons/pick.png");
     loading.add(pick_icon);
-    let wood_icon: Handle<Image> = asset_server.load("icons/wood.png");
-    loading.add(wood_icon);
+    let nine_patch_1: Handle<Image> = asset_server.load("icons/nine_patch_1.png");
+    loading.add(nine_patch_1);
 }
 
 pub fn setup_loading_ui(mut commands: Commands, asset_server: Res<AssetServer>) {

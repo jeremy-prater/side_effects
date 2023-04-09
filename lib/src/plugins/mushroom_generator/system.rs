@@ -1,6 +1,6 @@
 use super::component::*;
 use super::resource::*;
-use crate::components::player::Player;
+use crate::plugins::player::component::*;
 use crate::plugins::Selectable;
 use bevy::prelude::*;
 use bevy::utils::HashSet;
@@ -112,7 +112,12 @@ pub fn spawn_mushroom(
                         (4.0 * MUSHROOM_RENDER_SCALE).max(3.0),
                     ))
                     .insert(Selectable)
-                    .insert(Mushroom::default());
+                    .insert(Mushroom {
+                        hp: rand::thread_rng().gen_range(1.0..=5.0),
+                        effect: MushroomEffect::NoSideEffect,
+                        x,
+                        z,
+                    });
 
                 generate_count -= 1;
                 if generate_count == 0 {
