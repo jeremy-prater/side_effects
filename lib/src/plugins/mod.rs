@@ -4,6 +4,7 @@ use bevy_egui::EguiPlugin;
 pub mod animation;
 pub mod audio;
 pub mod camera;
+pub mod game_ui;
 pub mod loading;
 pub mod main_menu;
 pub mod mouse_capture;
@@ -18,6 +19,7 @@ pub mod tree_generator;
 pub use animation::*;
 pub use audio::*;
 pub use camera::*;
+pub use game_ui::*;
 pub use loading::*;
 pub use main_menu::*;
 pub use mouse_capture::*;
@@ -28,6 +30,7 @@ pub use selection::*;
 pub use sun::*;
 pub use terrain::*;
 pub use tree_generator::*;
+pub use game_ui::*;
 
 pub use crate::states::game_state::{debug_game_state_changes, GameState};
 
@@ -39,7 +42,6 @@ impl Plugin for SideEffectsPlugin {
             .add_plugin(EguiPlugin)
             .add_plugin(AssetLoaderPlugin)
             .add_plugin(AnimationPlugin)
-            .add_plugin(CameraPlugin)
             .add_plugin(PlayerPlugin)
             .add_plugin(TerrainPlugin)
             .add_plugin(TreeGeneratorPlugin)
@@ -50,6 +52,8 @@ impl Plugin for SideEffectsPlugin {
             .add_plugin(DebugSelectionInputPlugin)
             .add_plugin(SunPlugin)
             .add_plugin(GameAudioPlugin)
+            .add_plugin(GameUIPlugin)
+            .add_plugin(CameraPlugin)
             .add_system(debug_game_state_changes);
         // .add_system(cursor_grab_system);
     }

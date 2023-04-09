@@ -7,33 +7,53 @@ use log::info;
 pub fn load_game_assets(asset_server: Res<AssetServer>, mut loading: ResMut<AssetsLoading>) {
     info!("Loading game assets");
 
+    // Fonts
     let arcade_font: Handle<Font> = asset_server.load("fonts/arcade.ttf");
-    let freedom_font: Handle<Font> = asset_server.load("fonts/freedom.ttf");
-    let tanuki_model: Handle<Scene> = asset_server.load("models/Tanuki.glb#Scene0");
-    let mushrooom2_model: Handle<Scene> = asset_server.load("models/mushroom2.glb#Scene0");
-    let tree_model: Handle<Scene> = asset_server.load("models/tree_1.glb#Scene0");
-    let ambient_intro: Handle<AudioSource> = asset_server.load("audio/ambient_intro.ogg");
-    let ambient_loop: Handle<AudioSource> = asset_server.load("audio/ambient_loop.ogg");
-    let bad_trip_intro: Handle<AudioSource> = asset_server.load("audio/bad_trip_intro.ogg");
-    let bad_trip_loop: Handle<AudioSource> = asset_server.load("audio/bad_trip_loop.ogg");
-    let good_trip_intro: Handle<AudioSource> = asset_server.load("audio/good_trip_intro.ogg");
-    let good_trip_loop: Handle<AudioSource> = asset_server.load("audio/good_trip_loop.ogg");
-    let menu_intro: Handle<AudioSource> = asset_server.load("audio/menu_intro.ogg");
-    let menu_loop: Handle<AudioSource> = asset_server.load("audio/menu_loop.ogg");
-
     loading.add(&arcade_font);
+    let freedom_font: Handle<Font> = asset_server.load("fonts/freedom.ttf");
     loading.add(&freedom_font);
+
+    // Tanuki
+    let tanuki_model: Handle<Scene> = asset_server.load("models/Tanuki.glb#Scene0");
     loading.add(&tanuki_model);
+
+    // Mushrooms
+    let mushrooom2_model: Handle<Scene> = asset_server.load("models/mushroom2.glb#Scene0");
     loading.add(&mushrooom2_model);
+
+    // Trees
+    let tree_model: Handle<Scene> = asset_server.load("models/tree_1.glb#Scene0");
     loading.add(&tree_model);
+    
+    // Music
+    let ambient_intro: Handle<AudioSource> = asset_server.load("audio/ambient_intro.ogg");
     loading.add(&ambient_intro);
+    let ambient_loop: Handle<AudioSource> = asset_server.load("audio/ambient_loop.ogg");
     loading.add(&ambient_loop);
+    let bad_trip_intro: Handle<AudioSource> = asset_server.load("audio/bad_trip_intro.ogg");
     loading.add(&bad_trip_intro);
+    let bad_trip_loop: Handle<AudioSource> = asset_server.load("audio/bad_trip_loop.ogg");
     loading.add(&bad_trip_loop);
+    let good_trip_intro: Handle<AudioSource> = asset_server.load("audio/good_trip_intro.ogg");
     loading.add(&good_trip_intro);
+    let good_trip_loop: Handle<AudioSource> = asset_server.load("audio/good_trip_loop.ogg");
     loading.add(&good_trip_loop);
+    let menu_intro: Handle<AudioSource> = asset_server.load("audio/menu_intro.ogg");
     loading.add(&menu_intro);
+    let menu_loop: Handle<AudioSource> = asset_server.load("audio/menu_loop.ogg");
     loading.add(&menu_loop);
+
+    // Icons
+    let attack_icon: Handle<Image> = asset_server.load("icons/attack.png");
+    loading.add(attack_icon);
+    let inspect_icon: Handle<Image> = asset_server.load("icons/inspect.png");
+    loading.add(inspect_icon);
+    let move_icon: Handle<Image> = asset_server.load("icons/move.png");
+    loading.add(move_icon);
+    let pick_icon: Handle<Image> = asset_server.load("icons/pick.png");
+    loading.add(pick_icon);
+    let wood_icon: Handle<Image> = asset_server.load("icons/wood.png");
+    loading.add(wood_icon);
 }
 
 pub fn setup_loading_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
