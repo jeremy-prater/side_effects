@@ -1,9 +1,10 @@
 use crate::components::{
-    movement::{Direction, Momentum},
+    animation::AnimationMarker,
+    movement::{Direction, Momentum, MovingCharacter},
     player::Player,
 };
-use crate::plugins::camera::component::MainCamera;
 use crate::events::animation::AnimationTransitionEvent;
+use crate::plugins::camera::component::MainCamera;
 
 use crate::resources::player::PlayerSpeed;
 use bevy::prelude::*;
@@ -20,8 +21,8 @@ pub fn set_player_direction(
     }
 }
 
-pub fn animate_player_movement(
-    player_query: Query<(Entity, &Direction), With<Player>>,
+pub fn animate_character_movement(
+    player_query: Query<(Entity, &Direction), With<AnimationMarker>>,
     mut animation_transition_writer: EventWriter<AnimationTransitionEvent>,
     mut is_moving: Local<bool>,
 ) {
@@ -42,9 +43,9 @@ pub fn animate_player_movement(
     }
 }
 
-pub fn rotate_player_to_direction(
+pub fn rotate_character_to_direction(
     time: Res<Time>,
-    mut player_query: Query<(&mut Transform, &Direction), With<Player>>,
+    mut player_query: Query<(&mut Transform, &Direction), With<MovingCharacter>>,
     mut rotation_target: Local<Transform>,
 ) {
     for (mut transform, direction) in &mut player_query {
