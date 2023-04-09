@@ -10,8 +10,8 @@ impl Plugin for MovementPlugin {
             .add_systems(
                 (
                     set_player_direction,
-                    animate_player_movement,
-                    rotate_player_to_direction,
+                    animate_character_movement,
+                    rotate_character_to_direction,
                     handle_player_speed,
                     apply_momentum,
                 )

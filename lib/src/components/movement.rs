@@ -16,6 +16,9 @@ impl Direction {
     }
 }
 
+#[derive(Component)]
+pub struct MovingCharacter;
+
 #[derive(Component, Default)]
 pub struct Momentum(f32);
 
