@@ -105,7 +105,7 @@ fn debug_highlight(
 }
 
 #[derive(Resource)]
-struct ActiveSelection(HashSet<Entity>);
+pub struct ActiveSelection(HashSet<Entity>);
 
 /// Whether to allow an [`Entity`] to be automatically be (un)assigned the [`Selected`] component
 /// upon the mouse hovering over that [`Entity`] and a relevant [`SelectionControlEvent`] being
@@ -150,6 +150,10 @@ pub enum SelectionControlEvent {
     /// Directly untracks an [`Entity`] should it have been [`Selected`], removing [`Selected`] in
     /// the process.
     DirectRemove(Entity),
+}
+
+pub fn manually_remove(entity: Entity, mut active_selection: ResMut<ActiveSelection>) {
+    active_selection.0.remove(&entity);
 }
 
 #[allow(clippy::too_many_arguments)]

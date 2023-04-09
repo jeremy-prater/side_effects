@@ -1,6 +1,9 @@
+use crate::plugins::ActiveSelection;
+
+use super::resource::*;
 use bevy::prelude::*;
 
-#[derive(Default)]
+#[derive(Default, Debug, Clone)]
 pub enum MushroomEffect {
     // These are the side-effects :)
     // There are good and bad ones
@@ -9,22 +12,45 @@ pub enum MushroomEffect {
 
     // Negative effects
     Death,
-    LoseOneActionSlot,
-    LoseOneTurn,
+    SlowDown,
+    Sleep,
 
     // Positive effects
     FullHealth,
-    GainOneActionSlot,
+    SpeedUp,
 }
 
 #[derive(Component)]
 pub struct ActiveMushroomEffect {
     pub effect: MushroomEffect,
-    pub turns_left: u32,
+    pub time_left: f32,
 }
 
 #[derive(Component, Default)]
 pub struct Mushroom {
-    pub hp: u32,
+    pub hp: f32,
     pub effect: MushroomEffect,
+    pub x: i32,
+    pub z: i32,
+}
+
+impl Mushroom {
+    pub fn pick(
+        &self,
+        entity: Entity,
+        mut commands: Commands,
+        mut mushroom_db: ResMut<MushroomDatabase>,
+        active_selection: ResMut<ActiveSelection>,
+    ) -> (f32, MushroomEffect) {
+        // Add to picked mushroom database
+        mushroom_db
+            .picked_mushroom_locations
+            .insert((self.x, self.z));
+
+        // Despawn current mushroom
+        crate::plugins::selection::manually_remove(entity, active_selection);
+        commands.entity(entity).despawn_recursive();
+
+        (self.hp, self.effect.clone())
+    }
 }
