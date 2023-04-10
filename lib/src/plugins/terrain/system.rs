@@ -5,6 +5,7 @@ use bevy::prelude::*;
 use bevy::utils::HashSet;
 use bevy_rapier3d::prelude::*;
 use noise::{NoiseFn, Perlin};
+use oxidized_navigation::NavMeshAffector;
 
 const TERRAIN_X_SPAWN_RANGE: i32 = 1024;
 const TERRAIN_Z_SPAWN_RANGE: i32 = 1024;
@@ -79,7 +80,7 @@ pub fn spawn_terrain(
                         ))),
                         material: materials.add(StandardMaterial {
                             base_color: bevy_color,
-                            perceptual_roughness : 0.9,
+                            perceptual_roughness: 0.9,
                             ..default()
                         }),
                         transform: Transform::from_xyz(x as f32, -1.0, z as f32),
@@ -91,6 +92,7 @@ pub fn spawn_terrain(
                         TERRAIN_RADIUS_SPAWN_STEP as f32,
                     ))
                     .insert(RigidBody::Fixed)
+                    .insert(NavMeshAffector::default())
                     .insert(Terrain::default());
             }
         }

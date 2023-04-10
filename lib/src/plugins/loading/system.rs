@@ -1,10 +1,18 @@
+use crate::plugins::FlagAssets;
+
 use super::resource::LoadingScreen;
-use bevy::prelude::*;
+use bevy::prelude::{
+    info, AssetServer, Camera2dBundle, Commands, DespawnRecursiveExt, Font, Handle, Image,
+    ImageBundle, Res, ResMut, Scene, Size, Style, Val,
+};
 use bevy_kira_audio::prelude::*;
 use iyes_progress::prelude::*;
-use log::info;
 
-pub fn load_game_assets(asset_server: Res<AssetServer>, mut loading: ResMut<AssetsLoading>) {
+pub fn load_game_assets(
+    asset_server: Res<AssetServer>,
+    mut loading: ResMut<AssetsLoading>,
+    mut commands: Commands,
+) {
     info!("Loading game assets");
 
     // Fonts
@@ -24,6 +32,7 @@ pub fn load_game_assets(asset_server: Res<AssetServer>, mut loading: ResMut<Asse
     // Trees
     let tree_model: Handle<Scene> = asset_server.load("models/tree_1.glb#Scene0");
     loading.add(&tree_model);
+
     // Music
     let ambient_intro: Handle<AudioSource> = asset_server.load("audio/ambient_intro.ogg");
     loading.add(&ambient_intro);
@@ -53,6 +62,13 @@ pub fn load_game_assets(asset_server: Res<AssetServer>, mut loading: ResMut<Asse
     loading.add(pick_icon);
     let nine_patch_1: Handle<Image> = asset_server.load("icons/nine_patch_1.png");
     loading.add(nine_patch_1);
+
+    // Flags
+    let flag_move: Handle<Image> = asset_server.load("flag_move.png");
+    commands.insert_resource(FlagAssets {
+        flag_move: flag_move.clone(),
+    });
+    loading.add(flag_move);
 }
 
 pub fn setup_loading_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
@@ -64,10 +80,10 @@ pub fn setup_loading_ui(mut commands: Commands, asset_server: Res<AssetServer>) 
         .spawn(ImageBundle {
             style: Style {
                 size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
-                ..default()
+                ..Default::default()
             },
             image: asset_server.load("loading.png").into(),
-            ..default()
+            ..Default::default()
         })
         .id();
 

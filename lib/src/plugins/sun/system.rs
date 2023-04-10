@@ -28,18 +28,14 @@ pub fn spawn_sun(mut commands: Commands) {
         })
         .insert(Sun::default());
 
-    commands.insert_resource(AtmosphereCounter {
-        count: 0,
-    });
+    commands.insert_resource(AtmosphereCounter { count: 0 });
 }
 
 pub fn update_sun(
     mut sun: Query<(&mut Sun, &mut DirectionalLight, &mut Transform)>,
     time: Res<Time>,
-    #[cfg(not(target_arch = "wasm32"))]
-    mut atmosphere: AtmosphereMut<Nishita>,
-    #[cfg(not(target_arch = "wasm32"))]
-    mut atmo_counter: ResMut<AtmosphereCounter>,
+    #[cfg(not(target_arch = "wasm32"))] mut atmosphere: AtmosphereMut<Nishita>,
+    #[cfg(not(target_arch = "wasm32"))] mut atmo_counter: ResMut<AtmosphereCounter>,
 ) {
     let (mut sun, mut light, mut transform) = sun.get_single_mut().unwrap();
     let sun_gradient = colorgrad::magma();

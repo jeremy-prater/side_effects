@@ -1,6 +1,6 @@
 pub mod component;
-pub mod system;
 pub mod resource;
+pub mod system;
 
 use super::GameState;
 use bevy::prelude::*;

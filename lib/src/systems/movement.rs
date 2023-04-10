@@ -1,12 +1,14 @@
-use crate::components::{
-    animation::AnimationMarker,
-    movement::{Direction, Momentum, MovingCharacter},
-};
+use crate::components::animation::AnimationMarker;
+use crate::components::movement::{CharacterSpeed, Direction, Momentum, MovingCharacter};
 use crate::events::animation::AnimationTransitionEvent;
 use crate::plugins::camera::component::MainCamera;
-use crate::plugins::player::{component::*, resource::*};
+use crate::plugins::player::component::*;
+
 use bevy::prelude::*;
 use bevy_rapier3d::prelude::*;
+
+#[derive(Component)]
+pub struct IsInMotion(pub bool);
 
 pub fn set_player_direction(
     input: Res<Input<KeyCode>>,
@@ -20,34 +22,37 @@ pub fn set_player_direction(
 }
 
 pub fn animate_character_movement(
-    player_query: Query<(Entity, &Direction), With<AnimationMarker>>,
+    mut character_query: Query<(Entity, &Direction, &mut IsInMotion), With<AnimationMarker>>,
     mut animation_transition_writer: EventWriter<AnimationTransitionEvent>,
-    mut is_moving: Local<bool>,
 ) {
-    let previous_is_moving = *is_moving;
-    let (entity, direction) = player_query.single();
-    *is_moving = direction.is_moving();
+    for (entity, direction, mut is_moving) in character_query.iter_mut() {
+        let previous_is_moving = is_moving.0;
+        is_moving.0 = direction.is_moving();
 
-    if *is_moving != previous_is_moving {
-        let animation_name: String = if *is_moving {
-            "run".to_string()
-        } else {
-            "idle".to_string()
-        };
-        animation_transition_writer.send(AnimationTransitionEvent {
-            entity_id: entity,
-            animation_name,
-        });
+        if is_moving.0 != previous_is_moving {
+            let animation_name: String = if is_moving.0 {
+                "run".to_string()
+            } else {
+                "idle".to_string()
+            };
+            animation_transition_writer.send(AnimationTransitionEvent {
+                entity_id: entity,
+                animation_name,
+            });
+        }
     }
 }
 
 pub fn rotate_character_to_direction(
     time: Res<Time>,
-    mut player_query: Query<(&mut Transform, &Direction), With<MovingCharacter>>,
-    mut rotation_target: Local<Transform>,
+    mut character_query: Query<(&mut Transform, &Direction), With<MovingCharacter>>,
 ) {
-    for (mut transform, direction) in &mut player_query {
-        rotation_target.translation = transform.translation;
+    for (mut transform, direction) in &mut character_query {
+        let mut rotation_target = Transform::from_xyz(
+            transform.translation.x,
+            transform.translation.y,
+            transform.translation.z,
+        );
         let flat_velo_direction =
             Vec3::new(direction.get().x, 0.0, direction.get().z).normalize_or_zero();
         if flat_velo_direction != Vec3::ZERO {
@@ -65,16 +70,18 @@ pub fn rotate_character_to_direction(
 
 pub fn handle_player_speed(
     time: Res<Time>,
-    mut player_speed: ResMut<PlayerSpeed>,
-    mut player_query: Query<(&mut Momentum, &Direction), With<Player>>,
+    mut player_query: Query<
+        (&mut CharacterSpeed, &mut Momentum, &Direction),
+        With<MovingCharacter>,
+    >,
 ) {
-    for (mut momentum, direction) in &mut player_query {
+    for (mut character_speed, mut momentum, direction) in &mut player_query {
         if direction.is_moving() {
-            player_speed.accelerate(time.delta(), time.delta_seconds());
-            momentum.set(player_speed.current());
+            character_speed.accelerate(time.delta(), time.delta_seconds());
+            momentum.set(character_speed.current());
         } else {
             momentum.reset();
-            player_speed.reset();
+            character_speed.reset();
         }
     }
 }

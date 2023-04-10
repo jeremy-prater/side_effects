@@ -26,3 +26,8 @@ impl Plugin for AssetLoaderPlugin {
             .add_system(teardown_loading_ui.in_schedule(OnExit(GameState::Loading)));
     }
 }
+
+#[derive(Resource)]
+pub struct FlagAssets {
+    pub flag_move: Handle<Image>,
+}

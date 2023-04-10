@@ -6,6 +6,7 @@ use bevy::prelude::*;
 use bevy::utils::HashSet;
 use bevy_rapier3d::prelude::*;
 use noise::{NoiseFn, Perlin};
+use oxidized_navigation::NavMeshAffector;
 use rand::prelude::*;
 use std::f32::consts::PI;
 
@@ -117,7 +118,8 @@ pub fn spawn_mushroom(
                         effect: MushroomEffect::NoSideEffect,
                         x,
                         z,
-                    });
+                    })
+                    .insert(NavMeshAffector::default());
 
                 generate_count -= 1;
                 if generate_count == 0 {
