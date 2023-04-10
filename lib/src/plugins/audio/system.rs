@@ -70,7 +70,7 @@ pub fn audio_state_changed(
         }
         AudioState::GoodIntro => {
             let background_music = audio
-                .play(asset_server.load("audio/good_intro.ogg"))
+                .play(asset_server.load("audio/good_trip_intro.ogg"))
                 .fade_in(AudioTween::linear(Duration::from_secs_f32(
                     AUDIO_CROSSFADE_TIME,
                 )))
@@ -80,7 +80,7 @@ pub fn audio_state_changed(
         }
         AudioState::GoodLoop => {
             let background_music = audio
-                .play(asset_server.load("audio/good_loop.ogg"))
+                .play(asset_server.load("audio/good_trip_loop.ogg"))
                 .looped()
                 .handle();
 
@@ -88,7 +88,7 @@ pub fn audio_state_changed(
         }
         AudioState::BadIntro => {
             let background_music = audio
-                .play(asset_server.load("audio/bad_intro.ogg"))
+                .play(asset_server.load("audio/bad_trip_intro.ogg"))
                 .fade_in(AudioTween::linear(Duration::from_secs_f32(
                     AUDIO_CROSSFADE_TIME,
                 )))
@@ -98,7 +98,7 @@ pub fn audio_state_changed(
         }
         AudioState::BadLoop => {
             let background_music = audio
-                .play(asset_server.load("audio/bad_loop.ogg"))
+                .play(asset_server.load("audio/bad_trip_loop.ogg"))
                 .looped()
                 .handle();
 

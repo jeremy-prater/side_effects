@@ -28,8 +28,8 @@ pub struct FollowScorer;
 
 #[derive(ActionBuilder, Clone, Component, Debug)]
 pub struct FollowAction {
-    pub(super) end_pos: Option<Vec3>,
-    pub(super) path_cache: Peekable<std::vec::IntoIter<Vec3>>,
+    pub end_pos: Option<Vec3>,
+    pub path_cache: Peekable<std::vec::IntoIter<Vec3>>,
 }
 
 #[derive(Clone, Component, Copy, Debug, ScorerBuilder)]
@@ -37,8 +37,8 @@ pub struct MoveToScorer;
 
 #[derive(ActionBuilder, Clone, Component, Debug)]
 pub struct MoveToAction {
-    pub(super) end_pos: Option<Vec3>,
-    pub(super) path_cache: Peekable<std::vec::IntoIter<Vec3>>,
+    pub end_pos: Option<Vec3>,
+    pub path_cache: Peekable<std::vec::IntoIter<Vec3>>,
 }
 
 #[derive(Resource)]
@@ -211,7 +211,7 @@ pub fn move_to_action(
                     if let Ok((_speed, _dir, start_pos, parent)) = actor_query.get(*actor) {
                         if let Ok(FollowerJob::MoveTo(end_pos)) = target_query.get(parent.get()) {
                             if end_pos.distance(start_pos.translation()) < 6.0 {
-                                let dist = end_pos.distance(start_pos.translation());
+                                let _dist = end_pos.distance(start_pos.translation());
                                 continue;
                             }
 
@@ -254,17 +254,15 @@ pub fn move_to_action(
                                 if *end_pos != cached_end_pos {
                                     *state = ActionState::Requested;
                                     continue;
-                                } else {
-                                    if let Some(next) = action.path_cache.peek() {
-                                        dir.set(*next - curr_pos.translation());
-                                        if next.distance(curr_pos.translation()) < 6.0 {
-                                            let _ = action.path_cache.next();
-                                        }
-                                    } else {
-                                        dir.set(Vec3::ZERO);
-                                        char_speed.set(0.0);
-                                        *state = ActionState::Success;
+                                } else if let Some(next) = action.path_cache.peek() {
+                                    dir.set(*next - curr_pos.translation());
+                                    if next.distance(curr_pos.translation()) < 6.0 {
+                                        let _ = action.path_cache.next();
                                     }
+                                } else {
+                                    dir.set(Vec3::ZERO);
+                                    char_speed.set(0.0);
+                                    *state = ActionState::Success;
                                 }
                             } else {
                                 *state = ActionState::Cancelled

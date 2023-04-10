@@ -41,7 +41,7 @@ pub fn rotate_camera(
         return;
     };
 
-    if mouse_button_input.pressed(MouseButton::Middle) || key_input.pressed(KeyCode::LShift) {
+    if mouse_button_input.pressed(MouseButton::Right) || key_input.pressed(KeyCode::LShift) {
         let mut yaw = 0.0;
         let mut pitch = 0.0;
         for event in mouse_motion_event_reader.iter() {

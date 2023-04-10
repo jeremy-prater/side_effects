@@ -13,3 +13,11 @@ pub enum AudioState {
     BadIntro,
     BadLoop,
 }
+
+#[derive(Debug, Clone, Copy, Eq, PartialEq, Hash, Default, States)]
+pub enum AudioEvent {
+    #[default]
+    Ambient,
+    Good,
+    Bad,
+}

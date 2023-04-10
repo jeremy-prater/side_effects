@@ -54,7 +54,6 @@ pub fn spawn_mushroom(
     }
 
     let origin = player.unwrap().translation;
-    let mushroom_model: Handle<Scene> = asset_server.load("models/mushroom2.glb#Scene0");
 
     let x = ((origin.x / MUSHROOM_RADIUS_SPAWN_STEP as f32).ceil()
         * MUSHROOM_RADIUS_SPAWN_STEP as f32) as i32;
@@ -83,7 +82,20 @@ pub fn spawn_mushroom(
                 mushroom_db.mushroom_locations.insert((x, z));
                 commands
                     .spawn(SceneBundle {
-                        scene: mushroom_model.clone(),
+                        scene: match rand::thread_rng().gen_range(1..=4) {
+                            1 => {
+                                asset_server.load("models/mushroom1.glb#Scene0")
+                            }
+                            2 => {
+                                asset_server.load("models/mushroom2.glb#Scene0")
+                            }
+                            3 => {
+                                asset_server.load("models/mushroom3.glb#Scene0")
+                            }
+                            _ => {
+                                asset_server.load("models/mushroom4.glb#Scene0")
+                            }
+                        },
                         transform: Transform::from_translation(Vec3::new(
                             x as f32
                                 + rand::thread_rng()
@@ -115,7 +127,7 @@ pub fn spawn_mushroom(
                     .insert(Selectable)
                     .insert(Mushroom {
                         hp: rand::thread_rng().gen_range(1.0..=5.0),
-                        effect: MushroomEffect::NoSideEffect,
+                        effect: generate_side_effect(),
                         x,
                         z,
                     })
@@ -140,4 +152,24 @@ pub fn spawn_mushroom(
             ));
         }
     }
+}
+
+fn generate_side_effect() -> MushroomEffect {
+    let total_weight: f32 = EFFECT_WEIGHTS
+        .iter()
+        .fold(0.0, move |value, effect| value + effect.1);
+    let effect_value = rand::thread_rng().gen_range(0.0..=total_weight);
+
+    // Now we iterate though the list again and compare the value to the
+    let mut score: f32 = 0.0;
+
+    for effect in EFFECT_WEIGHTS {
+        score += effect.1;
+
+        if score > effect_value {
+            return effect.0.clone();
+        }
+    }
+
+    MushroomEffect::NoSideEffect
 }

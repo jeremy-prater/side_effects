@@ -1,6 +1,8 @@
 //! Functionality related to follower tanuki who can be commanded by the player.
 
-use std::collections::{HashSet, VecDeque};
+pub mod ai;
+
+
 
 use bevy::{prelude::*, window::PrimaryWindow};
 use bevy_egui::EguiContexts;
@@ -8,7 +10,7 @@ use bevy_rapier3d::prelude::*;
 use bevy_sprite3d::{Sprite3d, Sprite3dParams};
 use big_brain::prelude::*;
 
-use self::ai::{MoveToAction, MoveToScorer};
+
 
 use super::{
     camera::component::MainCamera, FlagAssets, GameState, Selectable, Selected,
@@ -24,8 +26,7 @@ use crate::{
     systems::movement::IsInMotion,
 };
 
-mod ai;
-use ai::{FollowAction, FollowScorer, FollowerAiPlugin};
+use ai::{FollowerAiPlugin};
 
 pub struct FollowerPlugin;
 impl Plugin for FollowerPlugin {
@@ -79,11 +80,11 @@ fn debug_job_input(
     mut clear_sel: EventWriter<SelectionControlEvent>,
 
     rapier: Res<RapierContext>,
-    asset_server: Res<AssetServer>,
+    _asset_server: Res<AssetServer>,
     flag_assets: Res<FlagAssets>,
-    default_job: Res<DefaultFollowerJob>,
+    _default_job: Res<DefaultFollowerJob>,
     mouse: Res<Input<MouseButton>>,
-    keyboard: Res<Input<KeyCode>>,
+    _keyboard: Res<Input<KeyCode>>,
 
     mut egui: EguiContexts,
     mut sprite_params: Sprite3dParams,
@@ -110,67 +111,6 @@ fn debug_job_input(
                 .point,
         )
     };
-
-    if keyboard.just_pressed(KeyCode::C) {
-        let tanuki = commands
-            .spawn(TanukiBundle {
-                scene: SceneBundle {
-                    scene: asset_server.load("models/Tanuki.glb#Scene0"),
-                    transform: Transform::from_xyz(0.0, 0.0, 0.0)
-                        .with_scale(Vec3::new(0.5, 0.5, 0.5)),
-                    ..Default::default()
-                },
-                animation_marker: AnimationMarker::new("tanuki", "idle"),
-                rigid_body: RigidBody::Dynamic,
-                velocity: Velocity::default(),
-                locked_axes: LockedAxes::ROTATION_LOCKED,
-                collider: Collider::capsule_y(0.125, 0.125),
-                direction: Direction::default(),
-                momentum: Momentum::default(),
-                damping: Damping {
-                    linear_damping: 0.2,
-                    angular_damping: 0.0,
-                },
-                friction: Friction {
-                    coefficient: 8.0,
-                    combine_rule: CoefficientCombineRule::Average,
-                },
-                gravity: GravityScale(1.0),
-                tanuki: Tanuki {
-                    age: 1,
-                    max_hp: 1,
-                    hp: 1,
-                    current_effects: Vec::new(),
-                    blocked_effects: HashSet::new(),
-                    next_actions: VecDeque::new(),
-                },
-                selectable: Selectable,
-                thinker: Thinker::build()
-                    .label("tanuki_ai")
-                    .picker(Highest)
-                    .when(
-                        FollowScorer,
-                        FollowAction {
-                            end_pos: None,
-                            path_cache: Vec::new().into_iter().peekable(),
-                        },
-                    )
-                    .when(
-                        MoveToScorer,
-                        MoveToAction {
-                            end_pos: None,
-                            path_cache: Vec::new().into_iter().peekable(),
-                        },
-                    ),
-                motion_tracker: IsInMotion(false),
-                moving_char_tag: MovingCharacter,
-                character_speed: CharacterSpeed::default(),
-            })
-            .id();
-        commands.entity(default_job.0).add_child(tanuki);
-
-        return;
-    }
 
     if mouse.just_pressed(MouseButton::Right) {
         let mut iter = query.iter().peekable();
@@ -232,7 +172,8 @@ pub enum FollowerJob {
 /// Resource holding the Entity which contains the [`FollowerJob`] that follower tanuki should
 /// default to.
 #[derive(Resource)]
-pub struct DefaultFollowerJob(Entity);
+
+pub struct DefaultFollowerJob(pub Entity);
 
 /// Component marking the default job
 #[derive(Component)]
@@ -241,21 +182,21 @@ pub struct DefaultFollowerJobMarker;
 #[derive(Bundle)]
 pub struct TanukiBundle {
     #[bundle]
-    scene: SceneBundle,
-    animation_marker: AnimationMarker,
-    rigid_body: RigidBody,
-    velocity: Velocity,
-    locked_axes: LockedAxes,
-    collider: Collider,
-    direction: Direction,
-    momentum: Momentum,
-    damping: Damping,
-    friction: Friction,
-    gravity: GravityScale,
-    tanuki: Tanuki,
-    selectable: Selectable,
-    thinker: ThinkerBuilder,
-    motion_tracker: IsInMotion,
-    moving_char_tag: MovingCharacter,
-    character_speed: CharacterSpeed,
+    pub scene: SceneBundle,
+    pub animation_marker: AnimationMarker,
+    pub rigid_body: RigidBody,
+    pub velocity: Velocity,
+    pub locked_axes: LockedAxes,
+    pub collider: Collider,
+    pub direction: Direction,
+    pub momentum: Momentum,
+    pub damping: Damping,
+    pub friction: Friction,
+    pub gravity: GravityScale,
+    pub tanuki: Tanuki,
+    pub selectable: Selectable,
+    pub thinker: ThinkerBuilder,
+    pub motion_tracker: IsInMotion,
+    pub moving_char_tag: MovingCharacter,
+    pub character_speed: CharacterSpeed,
 }

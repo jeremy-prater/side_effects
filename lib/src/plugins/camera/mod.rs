@@ -5,6 +5,7 @@ use crate::states::game_state::GameState;
 use bevy::prelude::*;
 #[cfg(not(target_arch = "wasm32"))]
 use bevy_atmosphere::prelude::*;
+use component::*;
 use system::*;
 
 pub struct CameraPlugin;
@@ -24,6 +25,10 @@ impl Plugin for CameraPlugin {
                 )
                     .chain()
                     .in_set(OnUpdate(GameState::InGame)),
+            )
+            .add_system(crate::despawn_with::<MainCamera>.in_schedule(OnExit(GameState::InGame)))
+            .add_system(
+                crate::despawn_with::<MainCameraTarget>.in_schedule(OnExit(GameState::InGame)),
             );
     }
 }
