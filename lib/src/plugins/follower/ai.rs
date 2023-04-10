@@ -15,6 +15,7 @@ pub struct FollowerAiPlugin;
 impl Plugin for FollowerAiPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugin(BigBrainPlugin)
+            .insert_resource(AiFrameCounter { count: 0 })
             .add_system(follow_action.in_set(BigBrainSet::Actions))
             .add_system(follow_scoring.in_set(BigBrainSet::Scorers))
             .add_system(move_to_action.in_set(BigBrainSet::Actions))
@@ -38,6 +39,24 @@ pub struct MoveToScorer;
 pub struct MoveToAction {
     pub(super) end_pos: Option<Vec3>,
     pub(super) path_cache: Peekable<std::vec::IntoIter<Vec3>>,
+}
+
+#[derive(Resource)]
+pub struct AiFrameCounter {
+    pub count: u8,
+}
+const AI_FRAME_SKIP: u8 = 32;
+
+impl AiFrameCounter {
+    pub fn next(&mut self) -> bool {
+        let out = self.count == 0;
+        self.count += 1;
+        if self.count == AI_FRAME_SKIP {
+            self.count = 0;
+        }
+
+        out
+    }
 }
 
 pub fn follow_scoring(
@@ -70,6 +89,7 @@ pub fn follow_action(
 
     nav_mesh_settings: Res<NavMeshSettings>,
     nav_mesh: Res<NavMesh>,
+    mut counter: ResMut<AiFrameCounter>,
 ) {
     if let Ok(nav_mesh) = nav_mesh.get().read() {
         for (Actor(actor), mut state, mut action) in action_query.iter_mut() {
@@ -122,8 +142,8 @@ pub fn follow_action(
                             if let Ok(cmd_end_pos) = followed_transform_query.get(*entity) {
                                 if let Some(cached_end_pos) = action.end_pos {
                                     // If the job changed, we should cancel the current action and reasses
-                                    if cmd_end_pos.translation() != cached_end_pos {
-                                        log::error!("HERE");
+                                    if counter.next() && cmd_end_pos.translation() != cached_end_pos
+                                    {
                                         *state = ActionState::Requested;
                                     }
                                     if let Some(next) = action.path_cache.peek() {
