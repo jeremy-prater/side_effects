@@ -2,6 +2,7 @@ use crate::components::animation::AnimationMarker;
 use crate::components::movement::{CharacterSpeed, Direction, Momentum, MovingCharacter};
 use crate::events::animation::AnimationTransitionEvent;
 use crate::plugins::camera::component::MainCamera;
+use crate::plugins::mushroom_generator::component::MushroomEffect;
 use crate::plugins::player::component::*;
 
 use bevy::prelude::*;
@@ -12,12 +13,21 @@ pub struct IsInMotion(pub bool);
 
 pub fn set_player_direction(
     input: Res<Input<KeyCode>>,
-    mut player_query: Query<&mut Direction, With<Player>>,
+    mut player_query: Query<(&mut Direction, &Player)>,
     camera_query: Query<&Transform, With<MainCamera>>,
 ) {
     let camera_transform = camera_query.single();
-    for mut direction in &mut player_query {
-        direction.set(get_direction_in_camera_space(camera_transform, &input));
+    for (mut direction, player) in &mut player_query {
+        let ratio = player
+            .active_effects
+            .iter()
+            .fold(1.0, |total, effect| match effect.effect {
+                MushroomEffect::SpeedUp => total * 1.25,
+                MushroomEffect::SlowDown => total * 0.75,
+                MushroomEffect::Sleep => total * 0.0,
+                _ => total,
+            });
+        direction.set(get_direction_in_camera_space(camera_transform, &input) * ratio);
     }
 }
 

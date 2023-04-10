@@ -16,3 +16,9 @@ pub struct PickButton(pub bool);
 
 #[derive(Component)]
 pub struct HealthText;
+
+#[derive(Component)]
+pub struct EffectsText;
+
+#[derive(Component)]
+pub struct GameUI;

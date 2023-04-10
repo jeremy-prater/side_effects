@@ -1,6 +1,6 @@
 use crate::plugins::mushroom_generator::component::*;
-use bevy::prelude::*;
-use std::collections::{HashSet, VecDeque};
+use bevy::{prelude::*, utils::hashbrown::HashSet};
+use std::collections::VecDeque;
 
 pub enum TanukiActions {
     Idle,

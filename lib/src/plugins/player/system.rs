@@ -1,7 +1,9 @@
+use std::time::Duration;
+
 use super::component::*;
 use crate::components::{
     animation::AnimationMarker,
-    movement::{CharacterSpeed, Direction, Momentum, MovingCharacter},
+    movement::{CharacterSpeed, Direction, Momentum, MovingCharacter}, tanuki::Tanuki,
 };
 use crate::plugins::camera::component::MainCameraTarget;
 use crate::plugins::selection::*;
@@ -42,8 +44,38 @@ pub fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>) {
         .insert(Player::default());
 }
 
-pub fn player_health(mut player: Query<&mut Player>, time: Res<Time>) {
-    if let Ok(mut player) = player.get_single_mut() {
-        player.hp -= time.delta_seconds() * 0.5;
+pub fn player_effects(mut commands: Commands, mut player: Query<&mut Player>, tanukis: Query<&Tanuki>, time: Res<Time>) {
+    if player.is_empty() {
+        return;
     }
+
+    let mut player = player.get_single_mut().unwrap();
+
+    let old_hp = player.hp;
+
+    //
+    player.hp -= time.delta_seconds() * 0.2 * (1 + tanukis.iter().len()) as f32;
+
+    if player.hp < 0.0 {
+        commands.insert_resource(NextState(Some(
+            crate::states::game_state::GameState::MainMenu,
+        )));
+    }
+
+    if old_hp > 40.0 && player.hp < 40.0 {
+        commands.insert_resource(NextState(Some(
+            crate::plugins::audio::state::AudioState::BadIntro,
+        )));
+    }
+
+    // Count down active effects
+    player.active_effects.retain_mut(|effect| {
+        effect.time_left = effect.time_left.saturating_sub(time.delta());
+
+        if effect.time_left == Duration::ZERO {
+            return false;
+        }
+
+        true
+    });
 }
